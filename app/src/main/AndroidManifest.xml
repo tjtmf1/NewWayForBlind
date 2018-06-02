@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SetStepActivity"></activity>
+        <activity android:name=".SetStepActivity" />
+        <activity android:name=".NFindRoadActivity"></activity>
     </application>
 
 </manifest>

@@ -19,8 +19,8 @@ public class TreeNode {
 
     int whoRU;//root니? root의 오른쪽에 있는애니? root의 왼쪽에 있는애니?=?root를 기준으로만!
 
-    String[] left;   //점프시 왼쪽방향으로 꺽는지에 대한 정보를 담고있음.
-    String[] right;   //점프시 오른쪽방향으로 꺽는지에 대한 정보를 담고있음.
+    String[] left;   //점프시 왼쪽방향으로 꺾는지에 대한 정보를 담고있음.
+    String[] right;   //점프시 오른쪽방향으로 꺾는지에 대한 정보를 담고있음.
     int lsize;   //left배열의 사이즈크기
     int rsize;   //right배열의 사이즈크기
 
