@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,6 +27,7 @@ public class NavigationActivity extends AppCompatActivity {
     private int goalStep;
     private double stride;
     private boolean endPoint = false;
+    private boolean isNav = false;
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,6 @@ public class NavigationActivity extends AppCompatActivity {
         imageView = (ImageView)findViewById(R.id.navigationImage);
         imageView.setImageResource(android.R.drawable.btn_star);
         init();
-        startNav();
     }
     public void init(){
         Intent intent = getIntent();
@@ -93,6 +93,7 @@ public class NavigationActivity extends AppCompatActivity {
 
     public void endNav(){
         stepCheck.endSensor();
+        tts.speak("목적지에 도달하였습니다.", TextToSpeech.QUEUE_ADD, null, null);
     }
 
     public void arrivePoint(){
@@ -107,6 +108,13 @@ public class NavigationActivity extends AppCompatActivity {
                 routeIndex += 2;
                 break;
             }
+        }
+    }
+
+    public void clickImage(View view) {
+        if(!isNav){
+            isNav = true;
+            startNav();
         }
     }
 }
