@@ -499,7 +499,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 
                 for (int i = 0; i < tree[dest_treeNum - 1].list[dest_i].lsize; i++)
                 {
-                    if (tree[dest_treeNum - 1].list[dest_i].left[i] == start) {
+                    if (tree[dest_treeNum - 1].list[dest_i].left[i].equals(start)) {
                         //109라인에서 1번트리로 갈때
                         //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺾으세요.\n");
                         result+= "왼쪽 방향으로 꺾으세요 ->";
@@ -523,7 +523,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 			*/
 
                 for (int i = 0; i < tree[start_treeNum - 1].list[dest_i].lsize; i++) {
-                    if (tree[start_treeNum - 1].list[dest_i].left[i] == start) {
+                    if (tree[start_treeNum - 1].list[dest_i].left[i].equals(start)) {
                         //107->입구B쪽으로 가는길, 왼쪽 꺾기
 
                         //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺾으세요.\n");
@@ -559,7 +559,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 
                 for (int i = 0; i < tree[dest_treeNum - 1].list[dest_i].lsize; i++)
                 {
-                    if (tree[dest_treeNum - 1].list[dest_i].left[i] == destination) {
+                    if (tree[dest_treeNum - 1].list[dest_i].left[i].equals(destination)) {
                         //입구B에서 1번트리로 갈때
                         //text_result.setText( text_result.getText()+"\n"+"오른쪽 방향으로 꺽으세요.\n");
                         result+= "오른쪽 방향으로 꺾으세요 ->";
@@ -572,7 +572,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                 }
                 for (int i = 0; i < tree[dest_treeNum - 1].list[dest_i].rsize; i++)
                 {
-                    if (tree[dest_treeNum - 1].list[dest_i].right[i] == destination) {
+                    if (tree[dest_treeNum - 1].list[dest_i].right[i].equals(destination)) {
                         //입구B에서 1번트리로 갈때
                         //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺽으세요.\n");
                         result+= "왼쪽 방향으로 꺾으세요 ->";
