@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SetStepActivity" />
-        <activity android:name=".NFindRoadActivity"></activity>
+        <activity android:name=".NFindRoadActivity" />
+        <activity android:name=".NavigationActivity"></activity>
     </application>
 
 </manifest>

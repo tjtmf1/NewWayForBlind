@@ -28,12 +28,13 @@ public class StepCheck {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if(msg.arg1 == STEP_CHANGED){
+                if(msg.arg1 == STEP_CHANGED) {
                     step = msg.arg2 - last_step;
-                    mainHandler.sendEmptyMessage(STEP_CHANGED);
-                    if(isSetCount){
-                        if(step == setCount){
-                            if(mainHandler != null){
+                    if (mainHandler != null) {
+                        if (!isSetCount)
+                            mainHandler.sendEmptyMessage(STEP_CHANGED);
+                        else {
+                            if (step == setCount) {
                                 mainHandler.sendEmptyMessage(STEP_COMPLETE);
                                 isSetCount = false;
                                 setCount = 0;
@@ -68,6 +69,11 @@ public class StepCheck {
     protected void finalize() throws Throwable {
         super.finalize();
         endSensor();
+    }
+
+    public void resetStep(){
+        last_step = step;
+        step = 0;
     }
 
     public void setStepCount(int nCount){
