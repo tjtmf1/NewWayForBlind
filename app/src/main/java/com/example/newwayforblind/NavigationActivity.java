@@ -114,7 +114,7 @@ public class NavigationActivity extends AppCompatActivity {
                 break;
             }
         }
-        if(routeIndex == routeLength - 1)
+        if(routeIndex == routeLength)
             endPoint = true;
     }
 
