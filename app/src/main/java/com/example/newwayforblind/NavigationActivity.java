@@ -1,17 +1,23 @@
 package com.example.newwayforblind;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.util.Locale;
 
 public class NavigationActivity extends AppCompatActivity {
     static final int STEP_CHANGED = 100;
     static final int STEP_COMPLETE = 300;
     private String[] route;
+    private int routeLength;
     private Handler handler;
     private StepCheck stepCheck;
     private boolean ttsReady = false;
@@ -20,6 +26,8 @@ public class NavigationActivity extends AppCompatActivity {
     private int routeIndex;
     private int goalStep;
     private double stride;
+    private boolean endPoint = false;
+    private boolean isNav = false;
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +38,19 @@ public class NavigationActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if(msg.what == STEP_CHANGED) {
-
+                    if(routeLength == routeIndex + 1)
+                        endPoint = true;
+                    if(stepCheck.getStep() - goalStep <= 10 && !endPoint){
+                        //route[routeIndex + 1] 에 따라 방향표시
+                        Toast.makeText(getApplicationContext(), route[routeIndex+1], Toast.LENGTH_SHORT).show();
+                    }else if(stepCheck.getStep() == 5){
+                        Toast.makeText(getApplicationContext(), "직진으로 변경", Toast.LENGTH_SHORT).show();
+                    }
                 }else if(msg.what == STEP_COMPLETE){
-
+                    if(!endPoint)
+                        arrivePoint();
+                    else
+                        endNav();
                 }
             }
         };
@@ -40,27 +58,63 @@ public class NavigationActivity extends AppCompatActivity {
             @Override
             public void onInit(int status) {
                 ttsReady = true;
+                tts.setLanguage(Locale.KOREA);
             }
         });
         imageView = (ImageView)findViewById(R.id.navigationImage);
+        imageView.setImageResource(android.R.drawable.btn_star);
+        init();
     }
     public void init(){
-        //경로 받아오기
+        Intent intent = getIntent();
+        String result = intent.getStringExtra("route");
+        route = result.split("/");
+        routeLength = route.length;
         //보폭 받아오기
+        stride = 1;
     }
 
     public void startNav(){
         stepCheck = new StepCheck(getApplicationContext(), handler);
         routeIndex = 0;
         stepCheck.startSensor();
+        goalStep = (int)(Integer.parseInt(route[1]) / stride + 0.5);
+        while(true) {
+            if (ttsReady) {
+                String text = route[routeIndex];
+                text += "으로 " + goalStep + "걸음 가세요.";
+                tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
+                stepCheck.setStepCount(goalStep);
+                routeIndex = 2;
+                break;
+            }
+        }
     }
 
     public void endNav(){
         stepCheck.endSensor();
+        tts.speak("목적지에 도달하였습니다.", TextToSpeech.QUEUE_ADD, null, null);
     }
 
     public void arrivePoint(){
-        //분기점 도착시
-        //방향안내 후 다음 경로의 길이 파악
+        goalStep = Integer.parseInt(route[routeIndex + 1]);
+        stepCheck.resetStep();
+        while(true) {
+            if (ttsReady) {
+                String text = route[routeIndex];
+                text += "으로 " + goalStep + "걸음 가세요.";
+                tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
+                stepCheck.setStepCount(goalStep);
+                routeIndex += 2;
+                break;
+            }
+        }
+    }
+
+    public void clickImage(View view) {
+        if(!isNav){
+            isNav = true;
+            startNav();
+        }
     }
 }

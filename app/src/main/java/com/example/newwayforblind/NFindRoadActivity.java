@@ -1,5 +1,6 @@
 package com.example.newwayforblind;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -327,7 +328,7 @@ public class NFindRoadActivity extends AppCompatActivity {
             else if (st_idx > tree[treeNum].lastIdx) {
                 //st와 dt가 모두 root를 기준으로 오른쪽에 존재함
                 //st먼저 검사합니당
-                //x += tree[treeNum].list[0].down_dist[1];//미리 더해주자
+                x += tree[treeNum].list[0].down_dist[1];//미리 더해주자
                 for (int i = tree[treeNum].lastIdx + 1; i < st_idx; i++) {
                     x += tree[treeNum].list[i].down_dist[0];
                 }
@@ -338,7 +339,8 @@ public class NFindRoadActivity extends AppCompatActivity {
                 }
             }
             // text_result.setText(text_result.getText().toString()+Math.abs(x-y)+"만큼 직진~\n");
-            result +="직진/"+Math.abs(x-y)+"/";
+            //result +="직진/"+Math.abs(x-y)+"/";
+            result +=Math.abs(x-y)+"/";
         }
         else {
             //starttreeNum과 DesttreeNum이 다를 경우
@@ -586,7 +588,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                 start_treeNum = 4;
                 st_idx = dest_i;
                 //text_result.setText( text_result.getText()+"\n"+"직진하세요.\n");
-                result+="직진/";
+                //result+="직진/";
 
                 findRoad(start, destination, start_treeNum, dest_treeNum);
 
@@ -595,7 +597,7 @@ public class NFindRoadActivity extends AppCompatActivity {
             else if (start_treeNum == 4 && dest_treeNum == 3) {
 
                 //text_result.setText( text_result.getText()+"\n"+"직진하세요.\n");
-                result+="직진/";
+                //result+="직진/";
 
                 start_treeNum = 3;
             }
@@ -622,6 +624,8 @@ public class NFindRoadActivity extends AppCompatActivity {
         findRoad(st, dt, start_treeID, dest_treeID);
 
         text_result.setText(result);
-
+        Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+        intent.putExtra("route", result);
+        startActivity(intent);
     }
 }
