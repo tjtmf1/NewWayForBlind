@@ -50,6 +50,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
@@ -85,6 +86,7 @@ public class MapFragment extends Fragment
     private ArrayList<Location> locations;
     private boolean startFlag = false;
     private boolean finishFlag = true;
+    private double distanceTravelled = 0;
 
     private final static int MAXENTRIES = 5;
     private String[] LikelyPlaceNames = null;
@@ -167,7 +169,7 @@ public class MapFragment extends Fragment
                 setMarker(currentLocation, "START", START_MARKER);
 
                 locations = new ArrayList<>();
-                locations.add(currentLocation);
+                locations.add(new Location(currentLocation));
 
                 stepCheck.startSensor();
                 startFlag = true;
@@ -188,6 +190,9 @@ public class MapFragment extends Fragment
                 finishFlag = true;
 
                 drawPolyline();
+                calculateDistanceTravelled();
+
+                Toast.makeText(getContext(), distanceTravelled + "", Toast.LENGTH_SHORT).show();
 
                 locations = null;
             }
@@ -211,6 +216,42 @@ public class MapFragment extends Fragment
                         .geodesic(true);
 
         this.googleMap.addPolyline(polylineOptions);
+    }
+
+    public void calculateDistanceTravelled(){
+        LatLng start, end;
+
+        for(int i=0; i<locations.size() - 1; i++){
+            start = new LatLng(locations.get(i).getLatitude(), locations.get(i).getLongitude());
+            end = new LatLng(locations.get(i + 1).getLatitude(), locations.get(i + 1).getLongitude());
+
+            distanceTravelled += calculationByDistance(start, end);
+        }
+    }
+
+    public double calculationByDistance(LatLng startP, LatLng endP){
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = startP.latitude;
+        double lat2 = endP.latitude;
+        double lon1 = startP.longitude;
+        double lon2 = endP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        double meter = valueResult % 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                + " Meter   " + meterInDec);
+
+        return Radius * c;
     }
 
     @Override
@@ -410,15 +451,14 @@ public class MapFragment extends Fragment
         if(startFlag == true && finishFlag == false){
             Location now = new Location(location);
             locations.add(now);
+            for(int i=0; i<locations.size(); i++){
+                Log.i(TAG, i + " : " + locations.get(i).getLatitude() + " " + locations.get(i).getLongitude());
+            }
 //            Log.i(TAG, 0 + " : " + locations.get(0).getLatitude() + " " + locations.get(0).getLongitude());
         }
 
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-        for(int i=0; i<locations.size(); i++){
-            Log.i(TAG, i + " : " + locations.get(i).getLatitude() + " " + locations.get(i).getLongitude());
-        }
     }
 
     private void searchCurrentPlaces() {

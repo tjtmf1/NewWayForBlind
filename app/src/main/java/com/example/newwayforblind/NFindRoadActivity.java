@@ -106,10 +106,10 @@ public class NFindRoadActivity extends AppCompatActivity {
         tree[0].list[4].up_dist = 10;
         tree[0].list[5].up_dist = 10;
         tree[0].list[6].up_dist = 10;
-        tree[0].list[7].up_dist = 50;
+        tree[0].list[7].up_dist = 10;
 
-        tree[0].list[8].up_dist = 30;
-        tree[0].list[9].up_dist = 50;
+        tree[0].list[8].up_dist = 10;
+        tree[0].list[9].up_dist = 10;
         tree[0].list[10].up_dist = 10;
 
 
@@ -119,10 +119,10 @@ public class NFindRoadActivity extends AppCompatActivity {
         tree[0].list[3].down_dist[0] = 10;
         tree[0].list[4].down_dist[0] = 10;
         tree[0].list[5].down_dist[0] = 10;
-        tree[0].list[6].down_dist[0] = 50;
+        tree[0].list[6].down_dist[0] = 10;
 
-        tree[0].list[0].down_dist[1] = 30;
-        tree[0].list[8].down_dist[0] = 50;
+        tree[0].list[0].down_dist[1] = 10;
+        tree[0].list[8].down_dist[0] = 10;
         tree[0].list[9].down_dist[0] = 10;
 
 
@@ -626,7 +626,7 @@ public class NFindRoadActivity extends AppCompatActivity {
         text_result.setText(result);
         Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
         result="";
-        result="직진/10/오른쪽/10/왼쪽/10";
+        result="직진/10/왼쪽/10/왼쪽/10/오른쪽/10/";
         intent.putExtra("route", result);
         startActivity(intent);
     }
