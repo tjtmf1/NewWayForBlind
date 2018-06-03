@@ -338,7 +338,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                 }
             }
             // text_result.setText(text_result.getText().toString()+Math.abs(x-y)+"만큼 직진~\n");
-            result +=Math.abs(x-y)+"만큼 직진~ ->";
+            result +=Math.abs(x-y)+"직진/";
         }
         else {
             //starttreeNum과 DesttreeNum이 다를 경우
@@ -478,13 +478,13 @@ public class NFindRoadActivity extends AppCompatActivity {
             }
 
             // text_result.setText(text_result.getText().toString()+Math.abs(x-y)+"만큼 직진~\n");
-            result+=Math.abs(x-y)+"만큼 직진~ ->";
+            result+=Math.abs(x-y)+"직진/";
 
             //점프할 때 검사 필요함.
             if (start_treeNum == 1 && dest_treeNum == 2) {
                 //1번 109에서 2번 109로 가야함.
                 // text_result.setText( text_result.getText()+"\n"+"오른쪽 방향으로 꺾으세요.\n");
-                result+= "오른쪽 방향으로 꺾으세요 ->";
+                result+= "오른쪽/";
 
                 start_treeNum = 2;
                 st_idx = dest_i;
@@ -499,7 +499,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                     if (tree[dest_treeNum - 1].list[dest_i].left[i].equals(start)) {
                         //109라인에서 1번트리로 갈때
                         //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺾으세요.\n");
-                        result+= "왼쪽 방향으로 꺾으세요 ->";
+                        result+= "왼쪽/";
 
                         st_idx = dest_i;
                         start_treeNum = 1;
@@ -524,7 +524,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                         //107->입구B쪽으로 가는길, 왼쪽 꺾기
 
                         //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺾으세요.\n");
-                        result+= "왼쪽 방향으로 꺾으세요 ->";
+                        result+= "왼쪽/";
 
                         st_idx = dest_i;
                         start_treeNum = 3;
@@ -537,7 +537,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                         //107->입구B쪽으로 가는길, 왼쪽 꺾기
 
                         //text_result.setText( text_result.getText()+"오른쪽 방향으로 꺾으세요.\n");
-                        result+= "오른쪽 방향으로 꺾으세요 ->";
+                        result+= "오른쪽/";
 
                         st_idx = dest_i;
                         start_treeNum = 3;
@@ -559,7 +559,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                     if (tree[dest_treeNum - 1].list[dest_i].left[i].equals(destination)) {
                         //입구B에서 1번트리로 갈때
                         //text_result.setText( text_result.getText()+"\n"+"오른쪽 방향으로 꺽으세요.\n");
-                        result+= "오른쪽 방향으로 꺾으세요 ->";
+                        result+= "오른쪽/";
 
                         st_idx = dest_i;
                         start_treeNum = 1;
@@ -572,7 +572,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                     if (tree[dest_treeNum - 1].list[dest_i].right[i].equals(destination)) {
                         //입구B에서 1번트리로 갈때
                         //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺽으세요.\n");
-                        result+= "왼쪽 방향으로 꺾으세요 ->";
+                        result+= "왼쪽/";
 
                         st_idx = dest_i;
                         start_treeNum = 1;
@@ -586,7 +586,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                 start_treeNum = 4;
                 st_idx = dest_i;
                 //text_result.setText( text_result.getText()+"\n"+"직진하세요.\n");
-                result+="직진";
+                result+="직진/";
 
                 findRoad(start, destination, start_treeNum, dest_treeNum);
 
@@ -595,7 +595,7 @@ public class NFindRoadActivity extends AppCompatActivity {
             else if (start_treeNum == 4 && dest_treeNum == 3) {
 
                 //text_result.setText( text_result.getText()+"\n"+"직진하세요.\n");
-                result+="직진";
+                result+="직진/";
 
                 start_treeNum = 3;
             }
