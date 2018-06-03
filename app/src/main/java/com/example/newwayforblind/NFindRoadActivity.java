@@ -626,7 +626,7 @@ public class NFindRoadActivity extends AppCompatActivity {
         text_result.setText(result);
         Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
         result="";
-        result="직진/10/오른쪽/10/";
+        result="직진/10/오른쪽/10/왼쪽/10";
         intent.putExtra("route", result);
         startActivity(intent);
     }

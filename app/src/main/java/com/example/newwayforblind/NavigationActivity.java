@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class NavigationActivity extends AppCompatActivity {
     private double stride;
     private boolean endPoint = false;
     private boolean isNav = false;
+    private boolean isAlert = false;
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +40,15 @@ public class NavigationActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if(msg.what == STEP_CHANGED) {
-                    if(routeLength == routeIndex + 1)
-                        endPoint = true;
-                    if(stepCheck.getStep() - goalStep <= 10 && !endPoint){
-                        //route[routeIndex + 1] 에 따라 방향표시
-                        Toast.makeText(getApplicationContext(), route[routeIndex+1], Toast.LENGTH_SHORT).show();
-                    }else if(stepCheck.getStep() == 5){
-                        Toast.makeText(getApplicationContext(), "직진으로 변경", Toast.LENGTH_SHORT).show();
+                    int k = stepCheck.getStep();
+                    Log.v("step", stepCheck.getStep()+"");
+                    if(!endPoint) {
+                        if (goalStep - stepCheck.getStep() <= 6 && !endPoint && !isAlert) {
+                            tts.speak("잠시 후 " + route[routeIndex] + "방향입니다.", TextToSpeech.QUEUE_ADD, null, null);
+                            isAlert = true;
+                        } else if (stepCheck.getStep() == 5) {
+                            Toast.makeText(getApplicationContext(), "직진으로 변경", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }else if(msg.what == STEP_COMPLETE){
                     if(!endPoint)
@@ -106,9 +110,12 @@ public class NavigationActivity extends AppCompatActivity {
                 tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
                 stepCheck.setStepCount(goalStep);
                 routeIndex += 2;
+                isAlert = false;
                 break;
             }
         }
+        if(routeIndex == routeLength - 1)
+            endPoint = true;
     }
 
     public void clickImage(View view) {

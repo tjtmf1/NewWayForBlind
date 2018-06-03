@@ -31,14 +31,11 @@ public class StepCheck {
                 if(msg.arg1 == STEP_CHANGED) {
                     step = msg.arg2 - last_step;
                     if (mainHandler != null) {
-                        if (!isSetCount)
-                            mainHandler.sendEmptyMessage(STEP_CHANGED);
-                        else {
-                            if (step == setCount) {
-                                mainHandler.sendEmptyMessage(STEP_COMPLETE);
-                                isSetCount = false;
-                                setCount = 0;
-                            }
+                        mainHandler.sendEmptyMessage(STEP_CHANGED);
+                        if (step == setCount) {
+                            mainHandler.sendEmptyMessage(STEP_COMPLETE);
+                            isSetCount = false;
+                            setCount = 0;
                         }
                     }
                 }
@@ -72,7 +69,7 @@ public class StepCheck {
     }
 
     public void resetStep(){
-        last_step = step;
+        last_step += step;
         step = 0;
     }
 
