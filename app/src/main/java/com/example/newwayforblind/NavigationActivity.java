@@ -8,6 +8,9 @@ import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.util.Locale;
 
 public class NavigationActivity extends AppCompatActivity {
     static final int STEP_CHANGED = 100;
@@ -37,8 +40,9 @@ public class NavigationActivity extends AppCompatActivity {
                         endPoint = true;
                     if(stepCheck.getStep() - goalStep <= 10 && !endPoint){
                         //route[routeIndex + 1] 에 따라 방향표시
+                        Toast.makeText(getApplicationContext(), route[routeIndex+1], Toast.LENGTH_SHORT).show();
                     }else if(stepCheck.getStep() == 5){
-                        //직진으로 변경
+                        Toast.makeText(getApplicationContext(), "직진으로 변경", Toast.LENGTH_SHORT).show();
                     }
                 }else if(msg.what == STEP_COMPLETE){
                     if(!endPoint)
@@ -52,9 +56,11 @@ public class NavigationActivity extends AppCompatActivity {
             @Override
             public void onInit(int status) {
                 ttsReady = true;
+                tts.setLanguage(Locale.KOREA);
             }
         });
         imageView = (ImageView)findViewById(R.id.navigationImage);
+        imageView.setImageResource(android.R.drawable.btn_star);
         init();
         startNav();
     }

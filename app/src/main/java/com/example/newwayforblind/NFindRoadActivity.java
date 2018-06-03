@@ -1,5 +1,6 @@
 package com.example.newwayforblind;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -623,6 +624,8 @@ public class NFindRoadActivity extends AppCompatActivity {
         findRoad(st, dt, start_treeID, dest_treeID);
 
         text_result.setText(result);
-
+        Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+        intent.putExtra("route", result);
+        startActivity(intent);
     }
 }
