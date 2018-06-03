@@ -22,6 +22,7 @@ public class NavigationActivity extends AppCompatActivity {
     private int routeIndex;
     private int goalStep;
     private double stride;
+    private boolean endPoint = false;
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +33,18 @@ public class NavigationActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if(msg.what == STEP_CHANGED) {
-
+                    if(routeLength == routeIndex + 1)
+                        endPoint = true;
+                    if(stepCheck.getStep() - goalStep <= 10 && !endPoint){
+                        //route[routeIndex + 1] 에 따라 방향표시
+                    }else if(stepCheck.getStep() == 5){
+                        //직진으로 변경
+                    }
                 }else if(msg.what == STEP_COMPLETE){
-                    arrivePoint();
+                    if(!endPoint)
+                        arrivePoint();
+                    else
+                        endNav();
                 }
             }
         };
