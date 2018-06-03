@@ -111,15 +111,16 @@ public class NFindRoadActivity extends AppCompatActivity {
         tree[0].list[9].up_dist = 50;
         tree[0].list[10].up_dist = 10;
 
+
+        tree[0].list[0].down_dist[0] = 10;	//입구A 밑의 왼쪽에는 101이 있지요.
         tree[0].list[1].down_dist[0] = 10;
         tree[0].list[2].down_dist[0] = 10;
         tree[0].list[3].down_dist[0] = 10;
         tree[0].list[4].down_dist[0] = 10;
         tree[0].list[5].down_dist[0] = 10;
-        tree[0].list[6].down_dist[0] = 10;
-        tree[0].list[7].down_dist[0] = 50;
+        tree[0].list[6].down_dist[0] = 50;
 
-        tree[0].list[1].down_dist[1] = 30;
+        tree[0].list[0].down_dist[1] = 30;
         tree[0].list[8].down_dist[0] = 50;
         tree[0].list[9].down_dist[0] = 10;
 
@@ -172,12 +173,12 @@ public class NFindRoadActivity extends AppCompatActivity {
 
         tree[1].list[5].up_dist = 40;
 
+        tree[1].list[0].down_dist[0] = 10;
         tree[1].list[1].down_dist[0] = 10;
         tree[1].list[2].down_dist[0] = 10;
-        tree[1].list[3].down_dist[0] = 10;
-        tree[1].list[4].down_dist[0] = 50;
+        tree[1].list[3].down_dist[0] = 50;
 
-        tree[1].list[5].down_dist[1] = 40;
+        tree[1].list[0].down_dist[1] = 40;
 
 	/*
 	#3 트리 생성
@@ -205,7 +206,7 @@ public class NFindRoadActivity extends AppCompatActivity {
         //거리 정보 생성
         tree[2].list[1].up_dist = 40;
 
-        tree[2].list[1].down_dist[0] = 40;
+        tree[2].list[0].down_dist[0] = 40;
 
 
 	/*
@@ -242,9 +243,9 @@ public class NFindRoadActivity extends AppCompatActivity {
         tree[3].list[2].up_dist = 10;
         tree[3].list[3].up_dist = 10;
 
+        tree[3].list[0].down_dist[0] = 10;
         tree[3].list[1].down_dist[0] = 10;
         tree[3].list[2].down_dist[0] = 10;
-        tree[3].list[3].down_dist[0] = 10;
 
     }
 
@@ -393,12 +394,11 @@ public class NFindRoadActivity extends AppCompatActivity {
                 for (int i = 0; i < 4; i++) {
                     if (start_treeNum == rootin[i]) {
                         //직진코드 삽입하기
-                        cout << "직진띠~(시범코드)" << endl;
+                        //cout << "직진띠~(시범코드)" << endl;
                         findRoad(start, destination, start_treeNum, rootin[i + 1]);
                         //return;
                     }
                 }
-
             }
 
 
@@ -552,7 +552,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                 //입구B가 dest_i임, 이때, 입구B는 105로 진입이 가능함.
                 //그러면 그냥 찾을 때, 105로 찾으면 되는거 아냐?
 
-                search("105", dest_i);
+                search("105", 3);
 
                 for (int i = 0; i < tree[dest_treeNum - 1].list[dest_i].lsize; i++)
                 {
