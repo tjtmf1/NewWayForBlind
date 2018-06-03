@@ -359,7 +359,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 		#2->#3 : #2->#1->#3
 
 		*/
-            int treeNum = start_treeNum;
+            int treeNum = start_treeNum-1;
             int x = 0; int y = 0;
             dest_i=0;
             int num=0;
@@ -376,9 +376,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                 for (int i = 0; i < 4; i++) {
                     if (start_treeNum == rootin[i]) {
                         //직진코드 삽입하기
-                        //text_result.setText(text_result.getText()+"직진띠~(시범코드)\n");
-                        result+="직진띠~(시범코드) ->";
-
+                        //cout << "직진띠~(시범코드)" << endl;
                         //직진(st_idx, 이 트리의 분기점으로 ㄱㄱ)
                         //이때 1번트리에서 105로 가는지, 109로 가는지는 코드 합치면서 조건문 더 써주면 될 듯.
                         findRoad(start, destination, rootin[i + 1], dest_treeNum);
@@ -395,10 +393,9 @@ public class NFindRoadActivity extends AppCompatActivity {
                 for (int i = 0; i < 4; i++) {
                     if (start_treeNum == rootin[i]) {
                         //직진코드 삽입하기
-                        // text_result.setText(text_result.getText()+"직진띠~(시범코드)\n");
-                        result+="직진띠~(시범코드) ->";
-                        findRoad(start, destination, rootin[i + 1], dest_treeNum);
-                        return;
+                        cout << "직진띠~(시범코드)" << endl;
+                        findRoad(start, destination, start_treeNum, rootin[i + 1]);
+                        //return;
                     }
                 }
 

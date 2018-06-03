@@ -30,7 +30,7 @@ public class TreeNode {
         child[0] = "없음";
         child[1] = "없음";
         up_dist = -1;
-        down_dist[0] = -1; down_dist[1] = -1;
+        down_dist[0] = 0; down_dist[1] = 0;
         whoRU = -1;
 
     }
