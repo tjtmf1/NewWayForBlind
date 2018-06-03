@@ -14,7 +14,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void btnFindRoad(View view) {
-        Intent intent=new Intent(this, NFindRoadActivity.class);
+        Intent intent = new Intent(this, NFindRoadActivity.class);
+        startActivity(intent);
+    }
+
+    public void onSetStep(View view) {
+        Intent intent = new Intent(getApplicationContext(), SetStepActivity.class);
         startActivity(intent);
     }
 }
