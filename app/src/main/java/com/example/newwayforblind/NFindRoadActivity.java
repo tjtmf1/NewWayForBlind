@@ -338,7 +338,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                 }
             }
             // text_result.setText(text_result.getText().toString()+Math.abs(x-y)+"만큼 직진~\n");
-            result +=Math.abs(x-y)+"직진/";
+            result +="직진/"+Math.abs(x-y)+"/";
         }
         else {
             //starttreeNum과 DesttreeNum이 다를 경우
@@ -478,7 +478,7 @@ public class NFindRoadActivity extends AppCompatActivity {
             }
 
             // text_result.setText(text_result.getText().toString()+Math.abs(x-y)+"만큼 직진~\n");
-            result+=Math.abs(x-y)+"직진/";
+            result+="직진/"+Math.abs(x-y)+"/";
 
             //점프할 때 검사 필요함.
             if (start_treeNum == 1 && dest_treeNum == 2) {
