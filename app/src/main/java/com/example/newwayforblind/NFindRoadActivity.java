@@ -8,15 +8,13 @@ import android.widget.TextView;
 
 public class NFindRoadActivity extends AppCompatActivity {
 
-
-
     public static final int MAX_NODE = 50;
-    Tree tree[];//tree를 전역으로 설정
+    Tree tree[];
 
     EditText edit_start;
     EditText edit_dest;
-    static TextView text_result;
-    //Tree tree[] = new Tree[4];//tree를 전역으로 설정
+    TextView text_result;
+    String result="";
 
     int st_idx;//start 가 tree의 list내에서 몇번째 index인지
     int dest_idx;
@@ -35,9 +33,9 @@ public class NFindRoadActivity extends AppCompatActivity {
     }
 
     void init() { //tree초기화
-        /*
-	#1 트리 생성
-	*/
+        /**
+         * tree 4개 생성
+         */
         tree=new Tree[4];
 
         tree[0]=new Tree();
@@ -125,13 +123,6 @@ public class NFindRoadActivity extends AppCompatActivity {
         tree[0].list[8].down_dist[0] = 50;
         tree[0].list[9].down_dist[0] = 10;
 
-        //출력확인
-//        for (int i = 0; i < 10; i++) {
-//            String str=textView.getText()+tree[0].list[i].roomData+"의 child: "+tree[0].list[i].child[0]+" & "+tree[0].list[i].child[1]
-//                    +"\n"+tree[0].list[i].roomData+"의 parent: "+tree[0].list[i].parent;
-//            textView.setText(str);
-//        }
-
 
 	/*
 	#2 트리 생성
@@ -188,12 +179,6 @@ public class NFindRoadActivity extends AppCompatActivity {
 
         tree[1].list[5].down_dist[1] = 40;
 
-        //출력확인
-//        for (int i = 0; i < 10; i++) {
-//            String str=textView.getText()+tree[1].list[i].roomData+ "의 child: "+tree[1].list[i].child[0]+" & "+tree[1].list[i].child[1]
-//                        +"\n"+tree[1].list[i].roomData+"의 parent: "+tree[1].list[i].parent;
-//            textView.setText(str);
-//        }
 	/*
 	#3 트리 생성
 	*/
@@ -222,14 +207,6 @@ public class NFindRoadActivity extends AppCompatActivity {
 
         tree[2].list[1].down_dist[0] = 40;
 
-
-//        //출력확인
-//        for (int i = 0; i < 10; i++) {
-//            String str=textView.getText()+tree[2].list[i].roomData+"의 child: "+tree[2].list[i].child[0]+ " & "+tree[2].list[i].child[1]
-//                        +"\n"+tree[2].list[i].roomData+"의 parent: "+tree[2].list[i].parent;
-//            textView.setText(str);
-//
-//        }
 
 	/*
 	#4 트리 생성
@@ -269,14 +246,6 @@ public class NFindRoadActivity extends AppCompatActivity {
         tree[3].list[2].down_dist[0] = 10;
         tree[3].list[3].down_dist[0] = 10;
 
-        //출력확인
-//        for (int i = 0; i < 10; i++) {
-//
-//            textView.setText(textView.getText()+tree[3].list[i].roomData+"의 child: "+tree[3].list[i].child[0]+ " & "+tree[3].list[i].child[1]
-//                    +"\n"+tree[3].list[i].roomData+"의 parent: "+tree[3].list[i].parent);
-//
-//        }
-
     }
 
     int search(String str,int check) {//***아직 동일한 이름의 노드는 처리하지 않은 상태~
@@ -302,20 +271,18 @@ public class NFindRoadActivity extends AppCompatActivity {
                 }
             }
         }
-
         return 0;  //못 찾을 경우, 트리에 등록되지 않았을 경우.
     }
 
     void findRoad(String start, String destination, int start_treeNum, int dest_treeNum) {//경로를 찾고 해당경로를 출력하는 함수
-																					  /*
-																					  [경로 검색 알고리즘]
-																					  1. 트리의 ID 검사
-																					  - 아이디 값이 같은 경우
-																					  -> 무조건 직진
-																					  따라서 '얼마나 직진?' 에 대한 정보만 필요함
-
-																					  - 아이디 값이 다른 경우
-																					  */
+ /*
+[경로 검색 알고리즘]
+1. 트리의 ID 검사
+ - 아이디 값이 같은 경우
+   -> 무조건 직진
+   따라서 '얼마나 직진?' 에 대한 정보만 필요함
+-  아이디 값이 다른 경우
+ */
 
         int st_dir=0;//출발지는 root기준으로 왼쪽? 오른쪽?
         int dest_dir=0;//도착지는 root기준으로 왼쪽? 오른쪽?
@@ -369,14 +336,12 @@ public class NFindRoadActivity extends AppCompatActivity {
                     y += tree[treeNum].list[i].down_dist[0];
                 }
             }
-
-            text_result.setText(text_result.getText().toString()+"x :"+x+"\n"+"y :"+y+"\n"+Math.abs(x-y)+"만큼 직진~\n");
-
+            // text_result.setText(text_result.getText().toString()+Math.abs(x-y)+"만큼 직진~\n");
+            result +=Math.abs(x-y)+"만큼 직진~ ->";
         }
         else {
             //starttreeNum과 DesttreeNum이 다를 경우
 
-            //findRoad()
 		/*#1(109) ~ #2 : 2
 		#2 ~ #1(109) : 1-109
 		#1(105) ~ #3 : 3
@@ -411,7 +376,8 @@ public class NFindRoadActivity extends AppCompatActivity {
                 for (int i = 0; i < 4; i++) {
                     if (start_treeNum == rootin[i]) {
                         //직진코드 삽입하기
-                        text_result.setText(text_result.getText()+"직진띠~(시범코드)\n");
+                        //text_result.setText(text_result.getText()+"직진띠~(시범코드)\n");
+                        result+="직진띠~(시범코드) ->";
 
                         //직진(st_idx, 이 트리의 분기점으로 ㄱㄱ)
                         //이때 1번트리에서 105로 가는지, 109로 가는지는 코드 합치면서 조건문 더 써주면 될 듯.
@@ -429,7 +395,8 @@ public class NFindRoadActivity extends AppCompatActivity {
                 for (int i = 0; i < 4; i++) {
                     if (start_treeNum == rootin[i]) {
                         //직진코드 삽입하기
-                        text_result.setText(text_result.getText()+"직진띠~(시범코드)\n");
+                        // text_result.setText(text_result.getText()+"직진띠~(시범코드)\n");
+                        result+="직진띠~(시범코드) ->";
                         findRoad(start, destination, rootin[i + 1], dest_treeNum);
                         return;
                     }
@@ -513,14 +480,14 @@ public class NFindRoadActivity extends AppCompatActivity {
                 }
             }
 
-            text_result.setText(text_result.getText().toString()+"x :"+x+"\n"+"y :"+y+"\n"+Math.abs(x-y)+"만큼 직진~\n");
-
-            /*------------------------------------------------------------*/
+            // text_result.setText(text_result.getText().toString()+Math.abs(x-y)+"만큼 직진~\n");
+            result+=Math.abs(x-y)+"만큼 직진~ ->";
 
             //점프할 때 검사 필요함.
             if (start_treeNum == 1 && dest_treeNum == 2) {
                 //1번 109에서 2번 109로 가야함.
-                text_result.setText( text_result.getText()+"\n"+"오른쪽 방향으로 꺽으세요.\n");
+                // text_result.setText( text_result.getText()+"\n"+"오른쪽 방향으로 꺾으세요.\n");
+                result+= "오른쪽 방향으로 꺾으세요 ->";
 
                 start_treeNum = 2;
                 st_idx = dest_i;
@@ -529,15 +496,14 @@ public class NFindRoadActivity extends AppCompatActivity {
             }
             else if (start_treeNum == 2 && dest_treeNum == 1) {
                 //1-109로 이동해야하는 상황
-			/*cout << "왼쪽 방향으로 꺽으세요." << endl;
-			start_treeNum = 2;
-			st_idx=dest_i;
-			findRoad(start, destination, start_treeNum, dest_treeNum);*/
+
                 for (int i = 0; i < tree[dest_treeNum - 1].list[dest_i].lsize; i++)
                 {
                     if (tree[dest_treeNum - 1].list[dest_i].left[i] == start) {
                         //109라인에서 1번트리로 갈때
-                        text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺽으세요.\n");
+                        //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺾으세요.\n");
+                        result+= "왼쪽 방향으로 꺾으세요 ->";
+
                         st_idx = dest_i;
                         start_treeNum = 1;
                         findRoad(start, destination, start_treeNum, dest_treeNum);
@@ -560,7 +526,9 @@ public class NFindRoadActivity extends AppCompatActivity {
                     if (tree[start_treeNum - 1].list[dest_i].left[i] == start) {
                         //107->입구B쪽으로 가는길, 왼쪽 꺾기
 
-                        text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺽으세요.\n");
+                        //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺾으세요.\n");
+                        result+= "왼쪽 방향으로 꺾으세요 ->";
+
                         st_idx = dest_i;
                         start_treeNum = 3;
                         findRoad(start, destination, start_treeNum, dest_treeNum);
@@ -571,7 +539,9 @@ public class NFindRoadActivity extends AppCompatActivity {
                     if (tree[start_treeNum - 1].list[dest_i].right[i].equals(start)) {
                         //107->입구B쪽으로 가는길, 왼쪽 꺾기
 
-                        text_result.setText( text_result.getText()+"오른쪽 방향으로 꺽으세요.\n");
+                        //text_result.setText( text_result.getText()+"오른쪽 방향으로 꺾으세요.\n");
+                        result+= "오른쪽 방향으로 꺾으세요 ->";
+
                         st_idx = dest_i;
                         start_treeNum = 3;
                         findRoad(start, destination, start_treeNum, dest_treeNum);
@@ -591,7 +561,9 @@ public class NFindRoadActivity extends AppCompatActivity {
                 {
                     if (tree[dest_treeNum - 1].list[dest_i].left[i] == destination) {
                         //입구B에서 1번트리로 갈때
-                        text_result.setText( text_result.getText()+"\n"+"오른쪽 방향으로 꺽으세요.\n");
+                        //text_result.setText( text_result.getText()+"\n"+"오른쪽 방향으로 꺽으세요.\n");
+                        result+= "오른쪽 방향으로 꺾으세요 ->";
+
                         st_idx = dest_i;
                         start_treeNum = 1;
                         findRoad(start, destination, start_treeNum, dest_treeNum);
@@ -602,7 +574,9 @@ public class NFindRoadActivity extends AppCompatActivity {
                 {
                     if (tree[dest_treeNum - 1].list[dest_i].right[i] == destination) {
                         //입구B에서 1번트리로 갈때
-                        text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺽으세요.\n");
+                        //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺽으세요.\n");
+                        result+= "왼쪽 방향으로 꺾으세요 ->";
+
                         st_idx = dest_i;
                         start_treeNum = 1;
                         findRoad(start, destination, start_treeNum, dest_treeNum);
@@ -614,18 +588,19 @@ public class NFindRoadActivity extends AppCompatActivity {
                 //3번트리에서 4번트리로 가는 방향
                 start_treeNum = 4;
                 st_idx = dest_i;
-                text_result.setText( text_result.getText()+"\n"+"직진하세요.\n");
+                //text_result.setText( text_result.getText()+"\n"+"직진하세요.\n");
+                result+="직진";
+
                 findRoad(start, destination, start_treeNum, dest_treeNum);
 
 
             }
             else if (start_treeNum == 4 && dest_treeNum == 3) {
 
-                text_result.setText( text_result.getText()+"\n"+"직진하세요.\n");
-                start_treeNum = 3;
-                //st_idx = dest_i;
-                //findRoad(start, destination, start_treeNum, dest_treeNum);
+                //text_result.setText( text_result.getText()+"\n"+"직진하세요.\n");
+                result+="직진";
 
+                start_treeNum = 3;
             }
 
         }
@@ -633,6 +608,10 @@ public class NFindRoadActivity extends AppCompatActivity {
 
 
     public void btnStart(View view) {
+
+        //result에 해당하는 텍스트 초기화
+        text_result.setText("");
+        result="";
 
         String st=edit_start.getText().toString();
         String dt=edit_dest.getText().toString();
@@ -642,10 +621,10 @@ public class NFindRoadActivity extends AppCompatActivity {
         start_dest=2;
         int dest_treeID = search(dt, 2);
 
+        //길찾기 ㄱㄱ
         findRoad(st, dt, start_treeID, dest_treeID);
 
+        text_result.setText(result);
 
-        text_result.setText(text_result.getText().toString()+"\n"+st_idx+" "+dest_idx+"\n"+start_treeID+" "+dest_treeID);
-        text_result.setText(text_result.getText()+"\nlast idx : "+tree[0].lastIdx);
     }
 }

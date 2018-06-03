@@ -16,6 +16,9 @@ public class Tree {
             list[i]=new TreeNode();
         treeID = -1;
         lastIdx = -1;
+
+        //init tree
+
     }
 
 }
