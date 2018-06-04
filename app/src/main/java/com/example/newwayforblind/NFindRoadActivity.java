@@ -281,6 +281,8 @@ public class NFindRoadActivity extends AppCompatActivity {
         return 0;  //못 찾을 경우, 트리에 등록되지 않았을 경우.
     }
 
+    boolean check=false;
+
     void findRoad(String start, String destination, int start_treeNum, int dest_treeNum) {//경로를 찾고 해당경로를 출력하는 함수
  /*
 [경로 검색 알고리즘]
@@ -383,12 +385,30 @@ public class NFindRoadActivity extends AppCompatActivity {
                 int rootin[] = { 4,3,1,2 };
                 for (int i = 0; i < 4; i++) {
                     if (start_treeNum == rootin[i]) {
-                        //직진코드 삽입하기
-                        //cout << "직진띠~(시범코드)" << endl;
-                        //직진(st_idx, 이 트리의 분기점으로 ㄱㄱ)
-                        //이때 1번트리에서 105로 가는지, 109로 가는지는 코드 합치면서 조건문 더 써주면 될 듯.
-                        findRoad(start, destination, rootin[i + 1], dest_treeNum);
-                        return;
+                        if (rootin[i] == 3) {
+                            //3->1->2
+                            search("입구B", 3, 0);
+                            dest_idx = dest_i;
+                            findRoad(start, "입구B", 3, 3);
+                            //dest_i = temp;
+                            search("105", 3, 0);
+                            st_idx = dest_i;
+                            findRoad(start, destination, rootin[i + 1], dest_treeNum);
+                            return;
+                        }
+                        if (rootin[i]==4) {
+                            //4->1
+                            if (dest_treeNum == 2)
+                                check = true;
+                            search("102", 3, 1);
+                            dest_idx = dest_i;
+                            findRoad(start, "102", 4, 4);
+                            //dest_i = temp;
+                            search("102", 3, 0);
+                            st_idx = dest_i;
+                            findRoad(start, destination, rootin[i + 1], dest_treeNum);
+                            return;
+                        }
                     }
                 }
 
