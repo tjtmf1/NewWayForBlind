@@ -623,10 +623,10 @@ public class NFindRoadActivity extends AppCompatActivity {
         //길찾기 ㄱㄱ
         findRoad(st, dt, start_treeID, dest_treeID);
 
-        text_result.setText(result);
+
         Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
-        result="";
-        result="직진/10/왼쪽/10/왼쪽/10/오른쪽/10/";
+        result="직진/15/왼쪽/15/오른쪽/10/";
+        text_result.setText(result);
         intent.putExtra("route", result);
         startActivity(intent);
     }
