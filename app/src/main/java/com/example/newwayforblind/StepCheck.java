@@ -32,7 +32,7 @@ public class StepCheck {
                     step = msg.arg2 - last_step;
                     if (mainHandler != null) {
                         mainHandler.sendEmptyMessage(STEP_CHANGED);
-                        if (step == setCount) {
+                        if (isSetCount && step >= setCount) {
                             mainHandler.sendEmptyMessage(STEP_COMPLETE);
                             isSetCount = false;
                             setCount = 0;
