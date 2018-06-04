@@ -307,7 +307,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 		- 이외의 경우라면 모두 root 를 기준으로 한쪽에 몰려있는 경우임
 		*/
             if (st_idx <= tree[treeNum].lastIdx&&
-                    tree[treeNum].lastIdx <= dest_idx) {
+                    tree[treeNum].lastIdx < dest_idx) {
                 //st와 dt 가 루트로부터 얼마만큼 떨어져 있는지를 계산
                 //st먼저 검사합니당
                 for (int i = 0; i < st_idx; i++) {
@@ -465,7 +465,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 		- 이외의 경우라면 모두 root 를 기준으로 한쪽에 몰려있는 경우임
 		*/
             if (st_idx <= tree[treeNum].lastIdx&&
-                    tree[treeNum].lastIdx <= dest_i) {
+                    tree[treeNum].lastIdx < dest_i) {
                 //st와 dt 가 루트로부터 얼마만큼 떨어져 있는지를 계산
                 //st먼저 검사합니당
                 for (int i = 0; i < st_idx; i++) {
@@ -506,12 +506,12 @@ public class NFindRoadActivity extends AppCompatActivity {
 
             // text_result.setText(text_result.getText().toString()+Math.abs(x-y)+"만큼 직진~\n");
             result+="직진/"+Math.abs(x-y)+"/";
-
             //점프할 때 검사 필요함.
             if (start_treeNum == 1 && dest_treeNum == 2) {
                 //1번 109에서 2번 109로 가야함.
                 // text_result.setText( text_result.getText()+"\n"+"오른쪽 방향으로 꺾으세요.\n");
                 search("109", 3, 1);
+
                 result+= "오른쪽/";
                 start_treeNum = 2;
                 st_idx = dest_i;
@@ -520,13 +520,13 @@ public class NFindRoadActivity extends AppCompatActivity {
             }
             else if (start_treeNum == 2 && dest_treeNum == 1) {
                 //1-109로 이동해야하는 상황
-
+                search("109", 3, 0);
                 for (int i = 0; i < tree[dest_treeNum - 1].list[dest_i].lsize; i++)
                 {
                     if (tree[dest_treeNum - 1].list[dest_i].left[i].equals(start)) {
                         //109라인에서 1번트리로 갈때
                         //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺾으세요.\n");
-                        search("109", 3, 0);
+
                         result+= "왼쪽/";
 
                         st_idx = dest_i;
@@ -652,7 +652,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 
 
         Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
-        result="직진/15/왼쪽/15/오른쪽/10/";
+        result="직진/15/오른쪽/6/왼쪽/15/";
         text_result.setText(result);
         intent.putExtra("route", result);
         startActivity(intent);
