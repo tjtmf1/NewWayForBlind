@@ -40,7 +40,6 @@ public class NavigationActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if(msg.what == STEP_CHANGED) {
-                    int k = stepCheck.getStep();
                     Log.v("step", stepCheck.getStep()+"");
                     if(!endPoint) {
                         if (goalStep - stepCheck.getStep() <= 6 && !endPoint && !isAlert) {
@@ -48,7 +47,12 @@ public class NavigationActivity extends AppCompatActivity {
                             isAlert = true;
                         } else if (stepCheck.getStep() == 5) {
                             Toast.makeText(getApplicationContext(), "직진으로 변경", Toast.LENGTH_SHORT).show();
+                        } else if(stepCheck.getStep() >= goalStep){
+                            arrivePoint();
                         }
+                    }else{
+                        if(stepCheck.getStep() >= goalStep)
+                            endNav();
                     }
                 }else if(msg.what == STEP_COMPLETE){
                     if(!endPoint)
@@ -88,7 +92,7 @@ public class NavigationActivity extends AppCompatActivity {
                 String text = route[routeIndex];
                 text += "으로 " + goalStep + "걸음 가세요.";
                 tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
-                stepCheck.setStepCount(goalStep);
+                //stepCheck.setStepCount(goalStep);
                 routeIndex = 2;
                 break;
             }
@@ -108,13 +112,13 @@ public class NavigationActivity extends AppCompatActivity {
                 String text = route[routeIndex];
                 text += "으로 " + goalStep + "걸음 가세요.";
                 tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
-                stepCheck.setStepCount(goalStep);
+                //stepCheck.setStepCount(goalStep);
                 routeIndex += 2;
                 isAlert = false;
                 break;
             }
         }
-        if(routeIndex == routeLength - 1)
+        if(routeIndex == routeLength)
             endPoint = true;
     }
 
