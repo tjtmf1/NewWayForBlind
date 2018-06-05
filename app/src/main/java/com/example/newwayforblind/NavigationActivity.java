@@ -17,6 +17,8 @@ import java.util.Locale;
 public class NavigationActivity extends AppCompatActivity {
     static final int STEP_CHANGED = 100;
     static final int STEP_COMPLETE = 300;
+    static final int SOON = 6;
+    static final int STRAIGHT = 5;
     private String[] route;
     private int routeLength;
     private Handler handler;
@@ -30,6 +32,7 @@ public class NavigationActivity extends AppCompatActivity {
     private boolean endPoint = false;
     private boolean isNav = false;
     private boolean isAlert = false;
+    private boolean isStraight = false;
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +42,18 @@ public class NavigationActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if(msg.what == STEP_CHANGED) {
-                    int k = stepCheck.getStep();
-                    Log.v("step", stepCheck.getStep()+"");
-                    if(!endPoint) {
-                        if (goalStep - stepCheck.getStep() <= 6 && !endPoint && !isAlert) {
-                            tts.speak("잠시 후 " + route[routeIndex] + "방향입니다.", TextToSpeech.QUEUE_ADD, null, null);
-                            isAlert = true;
-                        } else if (stepCheck.getStep() == 5) {
-                            Toast.makeText(getApplicationContext(), "직진으로 변경", Toast.LENGTH_SHORT).show();
-                        }
+                if (msg.what == STEP_CHANGED) {
+                    Log.v("step", stepCheck.getStep() + "");
+                    if (goalStep - stepCheck.getStep() <= SOON && !endPoint && !isAlert) {
+                        tts.speak("잠시 후 " + route[routeIndex] + "방향입니다.", TextToSpeech.QUEUE_ADD, null, null);
+                        isAlert = true;
                     }
-                }else if(msg.what == STEP_COMPLETE){
-                    if(!endPoint)
+                    if (stepCheck.getStep() >= STRAIGHT && !isStraight) {
+                        Toast.makeText(getApplicationContext(), "직진으로 변경", Toast.LENGTH_SHORT).show();
+                        isStraight = true;
+                    }
+                } else if (msg.what == STEP_COMPLETE) {
+                    if (!endPoint)
                         arrivePoint();
                     else
                         endNav();
@@ -83,6 +85,9 @@ public class NavigationActivity extends AppCompatActivity {
         routeIndex = 0;
         stepCheck.startSensor();
         goalStep = (int)(Integer.parseInt(route[1]) / stride + 0.5);
+        if(route[routeIndex].equals("직진")){
+            isStraight = true;
+        }
         while(true) {
             if (ttsReady) {
                 String text = route[routeIndex];
@@ -111,10 +116,11 @@ public class NavigationActivity extends AppCompatActivity {
                 stepCheck.setStepCount(goalStep);
                 routeIndex += 2;
                 isAlert = false;
+                isStraight = false;
                 break;
             }
         }
-        if(routeIndex == routeLength - 1)
+        if(routeIndex == routeLength)
             endPoint = true;
     }
 
