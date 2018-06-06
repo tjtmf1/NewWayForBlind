@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class NFindRoadActivity extends AppCompatActivity {
 
@@ -100,30 +101,32 @@ public class NFindRoadActivity extends AppCompatActivity {
         tree[0].list[7].lsize = 7;
 
         //거리 정보 생성
-        tree[0].list[1].up_dist = 10;
-        tree[0].list[2].up_dist = 10;
-        tree[0].list[3].up_dist = 10;
-        tree[0].list[4].up_dist = 10;
-        tree[0].list[5].up_dist = 10;
-        tree[0].list[6].up_dist = 10;
-        tree[0].list[7].up_dist = 10;
+        tree[0].list[1].up_dist = 5;
+        tree[0].list[2].up_dist = 5;
+        tree[0].list[3].up_dist = 8;
+        tree[0].list[4].up_dist = 5;
 
-        tree[0].list[8].up_dist = 10;
-        tree[0].list[9].up_dist = 10;
-        tree[0].list[10].up_dist = 10;
+        tree[0].list[5].up_dist = 12;
+        tree[0].list[6].up_dist = 12;
+        tree[0].list[7].up_dist = 14;
+
+        tree[0].list[8].up_dist = 5;
+        tree[0].list[9].up_dist = 5;
+        tree[0].list[10].up_dist = 12;
 
 
-        tree[0].list[0].down_dist[0] = 10;	//입구A 밑의 왼쪽에는 101이 있지요.
-        tree[0].list[1].down_dist[0] = 10;
-        tree[0].list[2].down_dist[0] = 10;
-        tree[0].list[3].down_dist[0] = 10;
-        tree[0].list[4].down_dist[0] = 10;
-        tree[0].list[5].down_dist[0] = 10;
-        tree[0].list[6].down_dist[0] = 10;
-
-        tree[0].list[0].down_dist[1] = 10;
-        tree[0].list[8].down_dist[0] = 10;
-        tree[0].list[9].down_dist[0] = 10;
+        tree[0].list[0].down_dist[0] = 5;	//입구A 밑의 왼쪽에는 101이 있지요.
+        tree[0].list[1].down_dist[0] = 5;
+        tree[0].list[2].down_dist[0] = 8;
+        tree[0].list[3].down_dist[0] = 5;
+        //101->105 : 23미터
+        tree[0].list[4].down_dist[0] = 12;
+        tree[0].list[5].down_dist[0] = 12;
+        tree[0].list[6].down_dist[0] = 14;
+        //105->109 : 38미터
+        tree[0].list[0].down_dist[1] = 5;
+        tree[0].list[8].down_dist[0] = 5;
+        tree[0].list[9].down_dist[0] = 12;
 
 
 	/*
@@ -167,19 +170,20 @@ public class NFindRoadActivity extends AppCompatActivity {
 
 
         //거리 정보 생성
-        tree[1].list[1].up_dist = 10;
-        tree[1].list[2].up_dist = 10;
-        tree[1].list[3].up_dist = 10;
-        tree[1].list[4].up_dist = 50;
+        tree[1].list[1].up_dist = 1;
+        tree[1].list[2].up_dist = 1;
+        tree[1].list[3].up_dist = 1;
+        tree[1].list[4].up_dist = 2;
 
-        tree[1].list[5].up_dist = 40;
+        tree[1].list[5].up_dist = 5;
 
-        tree[1].list[0].down_dist[0] = 10;
-        tree[1].list[1].down_dist[0] = 10;
-        tree[1].list[2].down_dist[0] = 10;
-        tree[1].list[3].down_dist[0] = 50;
+        //109 ~ 113 : 5미터
+        tree[1].list[0].down_dist[0] = 1;  //남자화장실
+        tree[1].list[1].down_dist[0] = 1;  //남자장애인화장실
+        tree[1].list[2].down_dist[0] = 1;  //여자화장실
+        tree[1].list[3].down_dist[0] = 2;  //113
 
-        tree[1].list[0].down_dist[1] = 40;
+        tree[1].list[0].down_dist[1] = 5;  //114
 
 	/*
 	#3 트리 생성
@@ -205,7 +209,7 @@ public class NFindRoadActivity extends AppCompatActivity {
         //tree[2].list[1].left = new string[]{""}
 
         //거리 정보 생성
-        tree[2].list[1].up_dist = 40;
+        tree[2].list[1].up_dist = 40;   //105-102
 
         tree[2].list[0].down_dist[0] = 40;
 
@@ -652,6 +656,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 
 
         Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+        Toast.makeText(this, "경로 : "+ result, Toast.LENGTH_LONG).show();
         result="직진/15/오른쪽/6/왼쪽/15/";
         text_result.setText(result);
         intent.putExtra("route", result);
