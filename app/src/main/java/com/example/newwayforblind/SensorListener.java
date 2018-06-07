@@ -15,7 +15,7 @@ public class SensorListener implements SensorEventListener {
     boolean isStart;
     float[] mGravity = null;
     float[] mGeomagnetic = null;
-    int[] orientation = null;
+    int[] orientation;
     SensorListener(Handler _handler){
         handler = _handler;
         isStart = true;
@@ -57,6 +57,7 @@ public class SensorListener implements SensorEventListener {
                 orientation[0] = (int)Math.toDegrees((double)values[0]);
                 orientation[1] = (int)Math.toDegrees((double)values[1]);
                 orientation[2] = (int)Math.toDegrees((double)values[2]);
+                Log.v("ori[0] : ", (orientation[0] + 180) + "");
             }
         }
     }
