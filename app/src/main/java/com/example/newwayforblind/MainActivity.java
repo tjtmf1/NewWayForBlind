@@ -22,4 +22,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), SetStepActivity.class);
         startActivity(intent);
     }
+
+    public void onOrientationTest(View view) {
+        Intent intent = new Intent(getApplicationContext(), OrientationTestActivity.class);
+        startActivity(intent);
+    }
 }
