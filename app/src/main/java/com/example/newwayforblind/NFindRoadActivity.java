@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class NFindRoadActivity extends AppCompatActivity {
 
@@ -100,30 +101,32 @@ public class NFindRoadActivity extends AppCompatActivity {
         tree[0].list[7].lsize = 7;
 
         //거리 정보 생성
-        tree[0].list[1].up_dist = 10;
-        tree[0].list[2].up_dist = 10;
-        tree[0].list[3].up_dist = 10;
-        tree[0].list[4].up_dist = 10;
-        tree[0].list[5].up_dist = 10;
-        tree[0].list[6].up_dist = 10;
-        tree[0].list[7].up_dist = 10;
+        tree[0].list[1].up_dist = 5;
+        tree[0].list[2].up_dist = 5;
+        tree[0].list[3].up_dist = 8;
+        tree[0].list[4].up_dist = 5;
 
-        tree[0].list[8].up_dist = 10;
-        tree[0].list[9].up_dist = 10;
-        tree[0].list[10].up_dist = 10;
+        tree[0].list[5].up_dist = 12;
+        tree[0].list[6].up_dist = 12;
+        tree[0].list[7].up_dist = 14;
+
+        tree[0].list[8].up_dist = 5;
+        tree[0].list[9].up_dist = 5;
+        tree[0].list[10].up_dist = 12;
 
 
-        tree[0].list[0].down_dist[0] = 10;	//입구A 밑의 왼쪽에는 101이 있지요.
-        tree[0].list[1].down_dist[0] = 10;
-        tree[0].list[2].down_dist[0] = 10;
-        tree[0].list[3].down_dist[0] = 10;
-        tree[0].list[4].down_dist[0] = 10;
-        tree[0].list[5].down_dist[0] = 10;
-        tree[0].list[6].down_dist[0] = 10;
-
-        tree[0].list[0].down_dist[1] = 10;
-        tree[0].list[8].down_dist[0] = 10;
-        tree[0].list[9].down_dist[0] = 10;
+        tree[0].list[0].down_dist[0] = 5;	//입구A 밑의 왼쪽에는 101이 있지요.
+        tree[0].list[1].down_dist[0] = 5;
+        tree[0].list[2].down_dist[0] = 8;
+        tree[0].list[3].down_dist[0] = 5;
+        //101->105 : 23미터
+        tree[0].list[4].down_dist[0] = 12;
+        tree[0].list[5].down_dist[0] = 12;
+        tree[0].list[6].down_dist[0] = 14;
+        //105->109 : 38미터
+        tree[0].list[0].down_dist[1] = 5;
+        tree[0].list[8].down_dist[0] = 5;
+        tree[0].list[9].down_dist[0] = 12;
 
 
 	/*
@@ -131,6 +134,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 	*/
         tree[1]=new Tree();
         tree[1].treeID = 2;
+        tree[1].lastIdx = 4;
 
         tree[1].list[0].roomData = "109";
         tree[1].list[1].roomData = "남자화장실";
@@ -167,25 +171,27 @@ public class NFindRoadActivity extends AppCompatActivity {
 
 
         //거리 정보 생성
-        tree[1].list[1].up_dist = 10;
-        tree[1].list[2].up_dist = 10;
-        tree[1].list[3].up_dist = 10;
-        tree[1].list[4].up_dist = 50;
+        tree[1].list[1].up_dist = 1;
+        tree[1].list[2].up_dist = 1;
+        tree[1].list[3].up_dist = 1;
+        tree[1].list[4].up_dist = 2;
 
-        tree[1].list[5].up_dist = 40;
+        tree[1].list[5].up_dist = 5;
 
-        tree[1].list[0].down_dist[0] = 10;
-        tree[1].list[1].down_dist[0] = 10;
-        tree[1].list[2].down_dist[0] = 10;
-        tree[1].list[3].down_dist[0] = 50;
+        //109 ~ 113 : 5미터
+        tree[1].list[0].down_dist[0] = 1;  //남자화장실
+        tree[1].list[1].down_dist[0] = 1;  //남자장애인화장실
+        tree[1].list[2].down_dist[0] = 1;  //여자화장실
+        tree[1].list[3].down_dist[0] = 2;  //113
 
-        tree[1].list[0].down_dist[1] = 40;
+        tree[1].list[0].down_dist[1] = 5;  //114
 
 	/*
 	#3 트리 생성
 	*/
         tree[2]=new Tree();
         tree[2].treeID = 3;
+        tree[2].lastIdx = 1;
 
         tree[2].list[0].roomData = "입구B";
         tree[2].list[1].roomData = "102";
@@ -205,7 +211,7 @@ public class NFindRoadActivity extends AppCompatActivity {
         //tree[2].list[1].left = new string[]{""}
 
         //거리 정보 생성
-        tree[2].list[1].up_dist = 40;
+        tree[2].list[1].up_dist = 40;   //105-102
 
         tree[2].list[0].down_dist[0] = 40;
 
@@ -215,6 +221,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 	*/
         tree[3]=new Tree();
         tree[3].treeID = 4;
+        tree[3].lastIdx = 3;
 
         tree[3].list[0].roomData = "102";
         tree[3].list[1].roomData = "102-1";
@@ -387,8 +394,8 @@ public class NFindRoadActivity extends AppCompatActivity {
                     if (start_treeNum == rootin[i]) {
                         if (rootin[i] == 3) {
                             //3->1->2
-                            search("입구B", 3, 0);
-                            dest_idx = dest_i;
+                            search("입구B", 2, 0);
+                            //dest_idx = dest_i;
                             findRoad(start, "입구B", 3, 3);
                             //dest_i = temp;
                             search("105", 3, 0);
@@ -400,7 +407,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                             //4->1
                             if (dest_treeNum == 2)
                                 check = true;
-                            search("102", 3, 1);
+                            search("102", 2, 1);
                             dest_idx = dest_i;
                             findRoad(start, "102", 4, 4);
                             //dest_i = temp;
@@ -420,10 +427,25 @@ public class NFindRoadActivity extends AppCompatActivity {
                 int rootin[] = { 2,1,3,4 };
                 for (int i = 0; i < 4; i++) {
                     if (start_treeNum == rootin[i]) {
-                        //직진코드 삽입하기
-                        //cout << "직진띠~(시범코드)" << endl;
-                        findRoad(start, destination, start_treeNum, rootin[i + 1]);
-                        //return;
+                        if (rootin[i] == 1) {
+                            //1-3-4
+						/*
+						-도서관->102
+						-102->102
+						-102->입구B
+						-입구B->105
+						-105->101
+						*/
+                            search("105", 2, 0);
+                            findRoad(start, destination, 1, 1);	//1
+                            //105->입구B
+                            findRoad(start, "입구B", 1, 3);
+                            search("입구B", 1, 0);
+                            search("도서관", 2, 0);
+                            //cout<<""
+                            findRoad(start, destination, 3, 4);	//분기
+                            return;
+                        }
                     }
                 }
             }
@@ -442,7 +464,16 @@ public class NFindRoadActivity extends AppCompatActivity {
             }
             else if (start_treeNum == 1 && dest_treeNum == 3) {
                 //가까운 분기점 105로 이동
-                search("105", 3, 0);
+
+                if (destination == "입구B")
+                {
+                    result+="오른쪽/10/";
+                    return;
+                }
+                else if (destination == "102") {
+                    result+="오른쪽/20/";
+                    return;
+                }
 
             }
             else if (start_treeNum == 3 && dest_treeNum == 1) {
@@ -515,8 +546,9 @@ public class NFindRoadActivity extends AppCompatActivity {
                 result+= "오른쪽/";
                 start_treeNum = 2;
                 st_idx = dest_i;
+                search(destination, 2, 0);
                 findRoad(start, destination, start_treeNum, dest_treeNum);
-
+                return;
             }
             else if (start_treeNum == 2 && dest_treeNum == 1) {
                 //1-109로 이동해야하는 상황
@@ -528,8 +560,8 @@ public class NFindRoadActivity extends AppCompatActivity {
                         //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺾으세요.\n");
 
                         result+= "왼쪽/";
-
                         st_idx = dest_i;
+                        search(destination, 2, 0);
                         start_treeNum = 1;
                         findRoad(start, destination, start_treeNum, dest_treeNum);
                         break;
@@ -556,6 +588,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 
                         st_idx = dest_i;
                         start_treeNum = 3;
+                        search(destination, 2, 0);
                         findRoad(start, destination, start_treeNum, dest_treeNum);
                         break;
                     }
@@ -568,6 +601,7 @@ public class NFindRoadActivity extends AppCompatActivity {
                         result+= "오른쪽/";
 
                         st_idx = dest_i;
+                        search(destination, 2, 0);
                         start_treeNum = 3;
                         findRoad(start, destination, start_treeNum, dest_treeNum);
                         break;
@@ -619,7 +653,6 @@ public class NFindRoadActivity extends AppCompatActivity {
 
                 findRoad(start, destination, start_treeNum, dest_treeNum);
 
-
             }
             else if (start_treeNum == 4 && dest_treeNum == 3) {
                 search("102", 3, 0);
@@ -652,9 +685,10 @@ public class NFindRoadActivity extends AppCompatActivity {
 
 
         Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
-        result="직진/15/오른쪽/6/왼쪽/15/";
+        Toast.makeText(this, "경로 : "+ result, Toast.LENGTH_LONG).show();
+        //result="직진/15/오른쪽/6/왼쪽/15/";
         text_result.setText(result);
         intent.putExtra("route", result);
-        startActivity(intent);
+        //startActivity(intent);
     }
 }
