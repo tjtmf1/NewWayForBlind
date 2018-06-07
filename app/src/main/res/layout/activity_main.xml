@@ -22,7 +22,4 @@
         android:text="SetStep"
         android:onClick="onSetStep"/>
 
-    //////////
-    asdfasdf
-
 </LinearLayout>
