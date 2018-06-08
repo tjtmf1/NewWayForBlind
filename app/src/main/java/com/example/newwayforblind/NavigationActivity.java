@@ -12,16 +12,20 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Locale;
 
 public class NavigationActivity extends AppCompatActivity {
 
-    Animation alpha;
+    Animation alpha, blink;
     LinearLayout above, below;
     FrameLayout doubleTap;
+    TextView blinkText;
+    ImageView blinkArrow;
 
     static final int STEP_CHANGED = 100;
     static final int STEP_COMPLETE = 300;
@@ -79,10 +83,12 @@ public class NavigationActivity extends AppCompatActivity {
                     if (goalStep - stepCheck.getStep() <= SOON && !endPoint && !isAlert) {
                         tts.speak("잠시 후 " + route[routeIndex] + "방향입니다.", TextToSpeech.QUEUE_ADD, null, null);
                         isAlert = true;
+                        rotateArrow(route[routeIndex]);
                     }
                     if (stepCheck.getStep() >= STRAIGHT && !isStraight) {
                         Toast.makeText(getApplicationContext(), "직진으로 변경", Toast.LENGTH_SHORT).show();
                         isStraight = true;
+                        rotateArrow("직진");
                     }
                 } else if (msg.what == STEP_COMPLETE) {
                     if (!endPoint)
@@ -96,12 +102,32 @@ public class NavigationActivity extends AppCompatActivity {
         init();
     }
 
+    public void rotateArrow(String direction) {
+        if(direction.equals("오른쪽")) {
+            blinkArrow.setRotation(90);
+        }
+
+        else if(direction.equals("왼쪽")) {
+            blinkArrow.setRotation(-90);
+        }
+        else if(direction.equals("직진")) {
+            blinkArrow.setRotation(0);
+        }
+    }
+
     public void initAnimation() {
         alpha = AnimationUtils.loadAnimation(this, R.anim.alpha);
+        blink = AnimationUtils.loadAnimation(this, R.anim.blink);
+
         above = (LinearLayout)findViewById(R.id.above);
         below = (LinearLayout)findViewById(R.id.below);
+        blinkText = (TextView)findViewById(R.id.blinkText);
+        blinkArrow = (ImageView)findViewById(R.id.blinkArrow);
+
         above.startAnimation(alpha);
         below.startAnimation(alpha);
+        blinkText.startAnimation(blink);
+        blinkArrow.startAnimation(blink);
     }
 
     public void init(){
