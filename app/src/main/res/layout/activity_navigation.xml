@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".NavigationActivity">
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/doubleTap"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/img_touch"
-        android:scaleXY="fitCenter">
-
-    </LinearLayout>
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="100dp"
+            android:tint="@color/colorPrimary"
+            android:src="@drawable/img_touch"
+            android:adjustViewBounds="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:paddingTop="500dp"
+            android:textSize="15dp"
+            android:textColor="@color/colorPrimary"
+            android:text="안내 시작 (더블 탭)"/>
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/above"
@@ -71,13 +85,6 @@
                 android:textColor="@color/colorGray"/>
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/navigationImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:onClick="clickImage"/>
-
     </LinearLayout>
 
     <LinearLayout
@@ -88,4 +95,4 @@
     </LinearLayout>
 
 
-</FrameLayout>
+</LinearLayout>

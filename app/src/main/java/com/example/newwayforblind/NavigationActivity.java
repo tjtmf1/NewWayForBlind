@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -21,6 +21,7 @@ public class NavigationActivity extends AppCompatActivity {
 
     Animation alpha;
     LinearLayout above, below;
+    FrameLayout doubleTap;
 
     static final int STEP_CHANGED = 100;
     static final int STEP_COMPLETE = 300;
@@ -32,7 +33,6 @@ public class NavigationActivity extends AppCompatActivity {
     private StepCheck stepCheck;
     private boolean ttsReady = false;
     private TextToSpeech tts;
-    private ImageView imageView;
     private int routeIndex;
     private int goalStep;
     private double stride;
@@ -47,7 +47,28 @@ public class NavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        initAnimation();
+        tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                ttsReady = true;
+                tts.setLanguage(Locale.KOREA);
+            }
+        });
+
+        doubleTap = (FrameLayout) findViewById(R.id.doubleTap);
+        doubleTap.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void doubleTap() {
+                doubleTap.setVisibility(View.GONE);
+                initAnimation();
+                tts.speak("안내를 시작합니다.", TextToSpeech.QUEUE_ADD, null, null);
+
+                if(!isNav){
+                    isNav = true;
+                    startNav();
+                }
+            }
+        });
 
         handler = new Handler(){
             @Override
@@ -71,15 +92,7 @@ public class NavigationActivity extends AppCompatActivity {
                 }
             }
         };
-        tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                ttsReady = true;
-                tts.setLanguage(Locale.KOREA);
-            }
-        });
-        imageView = (ImageView)findViewById(R.id.navigationImage);
-        imageView.setImageResource(android.R.drawable.btn_star);
+
         init();
     }
 
@@ -88,7 +101,9 @@ public class NavigationActivity extends AppCompatActivity {
         above = (LinearLayout)findViewById(R.id.above);
         below = (LinearLayout)findViewById(R.id.below);
         above.startAnimation(alpha);
+        below.startAnimation(alpha);
     }
+
     public void init(){
         Intent intent = getIntent();
         String result = intent.getStringExtra("route");
@@ -140,12 +155,5 @@ public class NavigationActivity extends AppCompatActivity {
         }
         if(routeIndex == routeLength)
             endPoint = true;
-    }
-
-    public void clickImage(View view) {
-        if(!isNav){
-            isNav = true;
-            startNav();
-        }
     }
 }

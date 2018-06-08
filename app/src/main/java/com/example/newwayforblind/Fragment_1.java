@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +36,8 @@ public class Fragment_1 extends Fragment {
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
     boolean voiceFlag = false;
     ImageView imgVoice;
+    private boolean ttsReady = false;
+    private TextToSpeech tts;
 
     public static final int MAX_NODE = 50;
     Tree tree[];
@@ -59,6 +63,14 @@ public class Fragment_1 extends Fragment {
 
         setSTT();
 
+        tts = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                ttsReady = true;
+                tts.setLanguage(Locale.KOREA);
+            }
+        });
+
         imgVoice = (ImageView)view.findViewById(R.id.imgVoice);
         text_result=(TextView)view.findViewById(R.id.result);
         edit_dest=(EditText)view.findViewById(R.id.editDest);
@@ -72,6 +84,7 @@ public class Fragment_1 extends Fragment {
             }
 
             public void onSwipeBottom() {
+                tts.speak("화면을 더블 탭 하면 안내를 시작합니다.", TextToSpeech.QUEUE_ADD, null, null);
                 text_result.setText("");
                 result="";
 

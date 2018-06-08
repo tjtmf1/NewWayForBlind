@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -52,6 +53,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 /**
@@ -63,8 +65,10 @@ public class MapFragment extends Fragment
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    LinearLayout linearLayout;
-    ImageView arrowUp, arrowDown;
+    private LinearLayout linearLayout;
+    private ImageView arrowUp, arrowDown;
+    private boolean ttsReady = false;
+    private TextToSpeech tts;
 
     private static final LatLng DEFAULT_LOCATION = new LatLng(37.56, 126.97);
     private static final String TAG = "googlemap_example";
@@ -156,10 +160,20 @@ public class MapFragment extends Fragment
 
         View layout = inflater.inflate(R.layout.fragment_map, container, false);
 
+        tts = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                ttsReady = true;
+                tts.setLanguage(Locale.KOREA);
+            }
+        });
+
         linearLayout = (LinearLayout)layout.findViewById(R.id.linearLayout);
         linearLayout.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             public void onSwipeTop() {
                 if(startFlag == false) {
+                    tts.speak("보폭측정 시작.", TextToSpeech.QUEUE_ADD, null, null);
+
                     setMarker(currentLocation, "START", START_MARKER);
 
                     locations = new ArrayList<>();
@@ -175,6 +189,7 @@ public class MapFragment extends Fragment
             }
             public void onSwipeBottom() {
                 if(startFlag == true) {
+                    tts.speak("보폭측정 종료.", TextToSpeech.QUEUE_ADD, null, null);
                     setMarker(currentLocation, "FINISH", FINISH_MARKER);
 
                     Toast.makeText(getActivity(), stepCheck.getStep() + "", Toast.LENGTH_SHORT).show();
