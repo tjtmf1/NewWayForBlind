@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    tools:context=".MainActivity">
 
-    <Button
+    <!--<Button
         android:onClick="btnFindRoad"
         android:id="@+id/btnFindRoad"
         android:text="길찾기"
@@ -26,5 +23,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="OrientationTest"
-        android:onClick="onOrientationTest"/>
-</LinearLayout>
+        android:onClick="onOrientationTest"/>-->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomNavigation"
+        android:layout_alignParentTop="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:layout_behavior="tech.thdev.app.view.BottomNavigationBehavior"
+
+        app:itemBackground="@color/colorWhite"
+        app:itemIconTint="@drawable/bottom_navigation_selector"
+        app:itemTextColor="@drawable/bottom_navigation_selector"
+        app:menu="@menu/menu" />
+
+</RelativeLayout>
