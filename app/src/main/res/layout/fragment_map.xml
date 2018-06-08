@@ -55,14 +55,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="0"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" 걸음"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textColor="@color/colorWhite"/>
 
     </LinearLayout>
@@ -97,7 +97,7 @@
             android:paddingBottom="65dp"
             android:paddingLeft="30dp"
             android:rotation="90"
-            android:tint="@color/colorArrow"
+            android:tint="@color/colorWhite"
             android:scaleType="fitCenter"
             android:src="@drawable/img_arrow"/>
         <TextView

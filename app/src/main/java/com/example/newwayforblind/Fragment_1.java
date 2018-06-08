@@ -1,16 +1,26 @@
 package com.example.newwayforblind;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,6 +28,12 @@ import android.widget.Toast;
 public class Fragment_1 extends Fragment {
 
     LinearLayout linearLayout;
+
+    Intent intent;
+    SpeechRecognizer mRecognizer;
+    private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
+    boolean voiceFlag = false;
+    ImageView imgVoice;
 
     public static final int MAX_NODE = 50;
     Tree tree[];
@@ -41,9 +57,21 @@ public class Fragment_1 extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_1, container, false);
 
+        setSTT();
+
+        imgVoice = (ImageView)view.findViewById(R.id.imgVoice);
+        text_result=(TextView)view.findViewById(R.id.result);
+        edit_dest=(EditText)view.findViewById(R.id.editDest);
+        edit_start=(EditText)view.findViewById(R.id.editStart);
+
         linearLayout = (LinearLayout)view.findViewById(R.id.linearLayout);
         linearLayout.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             public void onSwipeTop() {
+                imgVoice.setColorFilter(getResources().getColor(R.color.colorRed));
+                mRecognizer.startListening(intent);
+            }
+
+            public void onSwipeBottom() {
                 text_result.setText("");
                 result="";
 
@@ -58,28 +86,99 @@ public class Fragment_1 extends Fragment {
                 //길찾기 ㄱㄱ
                 findRoad(st, dt, start_treeID, dest_treeID);
 
-
                 Intent intent = new Intent(getContext(), NavigationActivity.class);
                 //Toast.makeText(this, "경로 : "+ result, Toast.LENGTH_LONG).show();
                 result="직진/15/오른쪽/6/왼쪽/15/";
                 //text_result.setText(result);
                 intent.putExtra("route", result);
                 startActivity(intent);
-                Toast.makeText(getContext(), "top", Toast.LENGTH_SHORT).show();
-            }
-            public void onSwipeBottom() {
-                Toast.makeText(getContext(), "bottom", Toast.LENGTH_SHORT).show();
             }
         });
-
-        text_result=(TextView)view.findViewById(R.id.result);
-        edit_dest=(EditText)view.findViewById(R.id.editDest);
-        edit_start=(EditText)view.findViewById(R.id.editStart);
 
         init();
 
         return view;
     }
+
+    void setSTT() {
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.RECORD_AUDIO)) {
+
+            }
+            else {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_RECORD_AUDIO);
+            }
+        }
+
+        intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getActivity().getPackageName());
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
+
+        mRecognizer = SpeechRecognizer.createSpeechRecognizer(getContext());
+        mRecognizer.setRecognitionListener(recognitionListener);
+    }
+
+    private RecognitionListener recognitionListener = new RecognitionListener() {
+        @Override
+        public void onReadyForSpeech(Bundle bundle) {
+
+        }
+
+        @Override
+        public void onBeginningOfSpeech() {
+        }
+
+        @Override
+        public void onRmsChanged(float v) {
+        }
+
+        @Override
+        public void onBufferReceived(byte[] bytes) {
+        }
+
+        @Override
+        public void onEndOfSpeech() {
+        }
+
+        @Override
+        public void onError(int i) {
+            edit_start.setText("에러");
+        }
+
+        @Override
+        public void onResults(Bundle bundle) {
+
+            String key = SpeechRecognizer.RESULTS_RECOGNITION;
+            ArrayList<String> voice = bundle.getStringArrayList(key);
+
+            String[] input = new String[voice.size()];
+            voice.toArray(input);
+
+            if(voiceFlag == false) {
+                edit_start.setText(input[0]);
+                Toast.makeText(getContext(), "출발지 입력 완료", Toast.LENGTH_SHORT).show();
+                voiceFlag = true;
+                mRecognizer.startListening(intent);
+            }
+            else if(voiceFlag == true) {
+                edit_dest.setText(input[0]);
+                Toast.makeText(getContext(), "도착지 입력 완료", Toast.LENGTH_SHORT).show();
+                voiceFlag = false;
+                imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
+            }
+        }
+
+        @Override
+        public void onPartialResults(Bundle bundle) {
+        }
+
+        @Override
+        public void onEvent(int i, Bundle bundle) {
+        }
+    };
 
     void init() { //tree초기화
         /**

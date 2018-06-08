@@ -93,16 +93,13 @@ public class MapFragment extends Fragment
     private String[] LikelyPlaceNames = null;
     private LatLng[] LikelyLatLngs = null;
 
-    /*private Button startBtn;
-    private Button finishBtn;*/
     private TextView strideTv;
 
     private StepCheck stepCheck;
     private Handler mHandler;
 
-    public MapFragment()
-    {
-        // required
+    public MapFragment() {
+
     }
 
     public void setMarker(Location location, String markerTitle, int markerType) {
@@ -172,8 +169,8 @@ public class MapFragment extends Fragment
                     startFlag = true;
                     finishFlag = false;
 
-                    arrowUp.setColorFilter(getResources().getColor(R.color.colorArrow));
-                    arrowDown.setColorFilter(getResources().getColor(R.color.colorWhite));
+                    arrowUp.setColorFilter(getResources().getColor(R.color.colorRed));
+                    arrowDown.setColorFilter(getResources().getColor(R.color.colorGreen));
                 }
             }
             public void onSwipeBottom() {
@@ -194,7 +191,7 @@ public class MapFragment extends Fragment
 
                     locations = null;
 
-                    arrowDown.setColorFilter(getResources().getColor(R.color.colorArrow));
+                    arrowDown.setColorFilter(getResources().getColor(R.color.colorWhite));
                     arrowUp.setColorFilter(getResources().getColor(R.color.colorWhite));
                 }
             }
@@ -206,44 +203,7 @@ public class MapFragment extends Fragment
         mapView = (MapView)layout.findViewById(R.id.map);
         mapView.getMapAsync(this);
 
-        /*startBtn = (Button) layout.findViewById(R.id.startBtn);
-        finishBtn = (Button) layout.findViewById(R.id.finishBtn);*/
         strideTv = (TextView) layout.findViewById(R.id.strideTv);
-
-        /*startBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setMarker(currentLocation, "START", START_MARKER);
-
-                locations = new ArrayList<>();
-                locations.add(new Location(currentLocation));
-
-                stepCheck.startSensor();
-                startFlag = true;
-                finishFlag = false;
-            }
-        });
-
-        finishBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setMarker(currentLocation, "FINISH", FINISH_MARKER);
-
-                Toast.makeText(getActivity(), stepCheck.getStep() + "", Toast.LENGTH_SHORT).show();
-
-                stepCheck.endSensor();
-                stepCheck.resetStep();
-                startFlag = false;
-                finishFlag = true;
-
-                drawPolyline();
-                calculateDistanceTravelled();
-
-                Toast.makeText(getContext(), distanceTravelled + "", Toast.LENGTH_SHORT).show();
-
-                locations = null;
-            }
-        });*/
 
         locations = new ArrayList<>();
 
