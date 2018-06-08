@@ -10,10 +10,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.newwayforblind.Fragment.Fragment_1;
-import com.example.newwayforblind.Fragment.Fragment_2;
-import com.example.newwayforblind.Fragment.Fragment_3;
-
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigation;
@@ -64,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        bottomNavigation.setSelectedItemId(R.id.action_fragment_2);
     }
 
     public void setViewPager() {
