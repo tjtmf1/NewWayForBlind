@@ -24,7 +24,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +63,9 @@ public class MapFragment extends Fragment
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
+    LinearLayout linearLayout;
+    ImageView arrowUp, arrowDown;
+
     private static final LatLng DEFAULT_LOCATION = new LatLng(37.56, 126.97);
     private static final String TAG = "googlemap_example";
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -89,12 +93,13 @@ public class MapFragment extends Fragment
     private String[] LikelyPlaceNames = null;
     private LatLng[] LikelyLatLngs = null;
 
-    private Button startBtn;
-    private Button finishBtn;
+    /*private Button startBtn;
+    private Button finishBtn;*/
     private TextView strideTv;
 
     private StepCheck stepCheck;
     private Handler mHandler;
+
     public MapFragment()
     {
         // required
@@ -154,25 +159,58 @@ public class MapFragment extends Fragment
 
         View layout = inflater.inflate(R.layout.fragment_map, container, false);
 
-        mapView = (MapView)layout.findViewById(R.id.map);
-        mapView.getMapAsync(this);
-
-        mapView.setFocusable(false);
-
-        mapView.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+        linearLayout = (LinearLayout)layout.findViewById(R.id.linearLayout);
+        linearLayout.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             public void onSwipeTop() {
-                Toast.makeText(getContext(), "top", Toast.LENGTH_SHORT).show();
+                if(startFlag == false) {
+                    setMarker(currentLocation, "START", START_MARKER);
+
+                    locations = new ArrayList<>();
+                    locations.add(new Location(currentLocation));
+
+                    stepCheck.startSensor();
+                    startFlag = true;
+                    finishFlag = false;
+
+                    arrowUp.setColorFilter(getResources().getColor(R.color.colorArrow));
+                    arrowDown.setColorFilter(getResources().getColor(R.color.colorWhite));
+                }
             }
             public void onSwipeBottom() {
-                Toast.makeText(getContext(), "bottom", Toast.LENGTH_SHORT).show();
+                if(startFlag == true) {
+                    setMarker(currentLocation, "FINISH", FINISH_MARKER);
+
+                    Toast.makeText(getActivity(), stepCheck.getStep() + "", Toast.LENGTH_SHORT).show();
+
+                    stepCheck.endSensor();
+                    stepCheck.resetStep();
+                    startFlag = false;
+                    finishFlag = true;
+
+                    drawPolyline();
+                    calculateDistanceTravelled();
+
+                    Toast.makeText(getContext(), distanceTravelled + "", Toast.LENGTH_SHORT).show();
+
+                    locations = null;
+
+                    arrowDown.setColorFilter(getResources().getColor(R.color.colorArrow));
+                    arrowUp.setColorFilter(getResources().getColor(R.color.colorWhite));
+                }
             }
         });
 
-        startBtn = (Button) layout.findViewById(R.id.startBtn);
-        finishBtn = (Button) layout.findViewById(R.id.finishBtn);
+        arrowUp = (ImageView)layout.findViewById(R.id.arrowUp);
+        arrowDown = (ImageView)layout.findViewById(R.id.arrowDown);
+
+        mapView = (MapView)layout.findViewById(R.id.map);
+        mapView.getMapAsync(this);
+
+        /*startBtn = (Button) layout.findViewById(R.id.startBtn);
+        finishBtn = (Button) layout.findViewById(R.id.finishBtn);*/
         strideTv = (TextView) layout.findViewById(R.id.strideTv);
 
-        startBtn.setOnClickListener(new View.OnClickListener() {
+        /*startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setMarker(currentLocation, "START", START_MARKER);
@@ -205,7 +243,7 @@ public class MapFragment extends Fragment
 
                 locations = null;
             }
-        });
+        });*/
 
         locations = new ArrayList<>();
 

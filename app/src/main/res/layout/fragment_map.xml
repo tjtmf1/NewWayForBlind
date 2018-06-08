@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorPrimary"
+    android:id="@+id/linearLayout"
     tools:context=".MapFragment">
 
     <LinearLayout
@@ -29,47 +30,87 @@
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/selector_frame">
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_gravity="center_horizontal">
+
         <com.google.android.gms.maps.MapView
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_map"/>
 
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/linearLayout">
-
-        <Button
-            android:id="@+id/startBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="START"
-            android:layout_weight="1" />
-
+        android:layout_marginTop="10dp"
+        android:gravity="right"
+        android:paddingRight="30dp">
         <TextView
             android:id="@+id/strideTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center"
             android:text="0"
-            android:textSize="25sp"
-            android:textAlignment="center"/>
-
-        <Button
-            android:id="@+id/finishBtn"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"/>
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="FINSIH"
-            android:layout_weight="1" />
+            android:text=" 걸음"
+            android:textSize="20dp"
+            android:textColor="@color/colorWhite"/>
+
     </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingRight="250dp"
+            android:textAlignment="center"
+            android:text="시작"
+            android:textSize="15dp"
+            android:textColor="@color/colorWhite"/>
+        <ImageView
+            android:id="@+id/arrowUp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="65dp"
+            android:paddingLeft="30dp"
+            android:rotation="270"
+            android:tint="@color/colorWhite"
+            android:scaleType="fitCenter"
+            android:src="@drawable/img_arrow"/>
+        <ImageView
+            android:id="@+id/arrowDown"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="65dp"
+            android:paddingLeft="30dp"
+            android:rotation="90"
+            android:tint="@color/colorArrow"
+            android:scaleType="fitCenter"
+            android:src="@drawable/img_arrow"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="250dp"
+            android:textAlignment="center"
+            android:text="종료"
+            android:textSize="15dp"
+            android:textColor="@color/colorWhite"/>
+    </FrameLayout>
+
 
 
 
