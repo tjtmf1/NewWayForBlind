@@ -29,11 +29,19 @@
         android:text="step"/>
 
     <TextView
-        android:id="@+id/orientation"
+    android:id="@+id/orientation"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="50sp"
+    android:textAlignment="center"
+    android:text="orientation"/>
+
+    <TextView
+        android:id="@+id/direction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="50sp"
         android:textAlignment="center"
-        android:text="orientation"/>
+        android:text="직진"/>
 
 </LinearLayout>
