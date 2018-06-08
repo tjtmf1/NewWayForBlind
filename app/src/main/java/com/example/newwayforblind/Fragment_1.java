@@ -7,14 +7,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class Fragment_1 extends Fragment {
+
+    LinearLayout linearLayout;
 
     public static final int MAX_NODE = 50;
     Tree tree[];
@@ -28,8 +31,6 @@ public class Fragment_1 extends Fragment {
     int dest_idx;
     int dest_i; //다른 트리에 있을 경우 필요.
 
-    Button btnSearch;
-
     public Fragment_1() {
         // Required empty public constructor
     }
@@ -40,16 +41,9 @@ public class Fragment_1 extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_1, container, false);
 
-        text_result=(TextView)view.findViewById(R.id.result);
-        edit_dest=(EditText)view.findViewById(R.id.editDest);
-        edit_start=(EditText)view.findViewById(R.id.editStart);
-
-        init();
-
-        btnSearch = (Button)view.findViewById(R.id.btnSearch);
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        linearLayout = (LinearLayout)view.findViewById(R.id.linearLayout);
+        linearLayout.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+            public void onSwipeTop() {
                 text_result.setText("");
                 result="";
 
@@ -71,8 +65,18 @@ public class Fragment_1 extends Fragment {
                 //text_result.setText(result);
                 intent.putExtra("route", result);
                 startActivity(intent);
+                Toast.makeText(getContext(), "top", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeBottom() {
+                Toast.makeText(getContext(), "bottom", Toast.LENGTH_SHORT).show();
             }
         });
+
+        text_result=(TextView)view.findViewById(R.id.result);
+        edit_dest=(EditText)view.findViewById(R.id.editDest);
+        edit_start=(EditText)view.findViewById(R.id.editStart);
+
+        init();
 
         return view;
     }

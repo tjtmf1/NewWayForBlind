@@ -4,17 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_fragment_1"
-        android:icon="@android:drawable/ic_dialog_info"
+        android:icon="@drawable/img_icon1"
         android:title="길안내"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_fragment_2"
-        android:icon="@android:drawable/ic_dialog_info"
+        android:icon="@drawable/img_icon2"
         android:title="초행길"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_fragment_3"
-        android:icon="@android:drawable/ic_dialog_info"
-        android:title="보폭"
+        android:icon="@drawable/img_icon3"
+        android:title="보폭측정"
         app:showAsAction="ifRoom" />
 </menu>

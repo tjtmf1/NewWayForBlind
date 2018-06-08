@@ -41,8 +41,8 @@
         app:layout_behavior="tech.thdev.app.view.BottomNavigationBehavior"
 
         app:itemBackground="@color/colorWhite"
-        app:itemIconTint="@drawable/bottom_navigation_selector"
-        app:itemTextColor="@drawable/bottom_navigation_selector"
+        app:itemIconTint="@drawable/selector_bottom"
+        app:itemTextColor="@drawable/selector_bottom"
         app:menu="@menu/menu" />
 
 </RelativeLayout>

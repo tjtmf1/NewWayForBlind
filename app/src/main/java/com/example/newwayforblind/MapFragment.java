@@ -2,7 +2,6 @@ package com.example.newwayforblind;
 
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,8 +51,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
-import static android.content.ContentValues.TAG;
 
 
 /**
@@ -154,10 +151,22 @@ public class MapFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View layout = inflater.inflate(R.layout.fragment_map, container, false);
 
         mapView = (MapView)layout.findViewById(R.id.map);
         mapView.getMapAsync(this);
+
+        mapView.setFocusable(false);
+
+        mapView.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+            public void onSwipeTop() {
+                Toast.makeText(getContext(), "top", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeBottom() {
+                Toast.makeText(getContext(), "bottom", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         startBtn = (Button) layout.findViewById(R.id.startBtn);
         finishBtn = (Button) layout.findViewById(R.id.finishBtn);

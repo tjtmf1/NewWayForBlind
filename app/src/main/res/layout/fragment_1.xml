@@ -6,29 +6,60 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorPrimary"
+    android:id="@+id/linearLayout"
     tools:context=".Fragment_1">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="초행길"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"/>
+
+    <!--<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+
+        <EditText
+            android:id="@+id/asdf"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="15dp"
+            android:paddingLeft="20dp"
+            android:hint="출발지 입력"
+            android:background="@drawable/selector_edittext"/>
+
+        <ImageButton
+            android:id="@+id/id_search_button"
+            android:layout_width="30dp"
+            android:layout_height="10dp"
+            android:layout_alignTop="@+id/asdf"
+            android:layout_alignBottom="@+id/asdf"
+            android:layout_alignRight="@+id/asdf"/>
+
+    </RelativeLayout>-->
     <EditText
         android:id="@+id/editStart"
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="55dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="15dp"
+        android:paddingLeft="20dp"
+        android:hint="출발지 입력"
+        android:background="@drawable/selector_edittext"/>
     <EditText
         android:id="@+id/editDest"
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="55dp"
+        android:layout_marginHorizontal="20dp"
+        android:paddingLeft="20dp"
+        android:hint="도착지 입력"
+        android:background="@drawable/selector_edittext"/>
+
     <TextView
-        android:layout_weight="3"
         android:id="@+id/result"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
-
-    <Button
-        android:text="검색"
-        android:layout_weight="1"
-        android:id="@+id/btnSearch"
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="40dp" />
 
 </LinearLayout>
