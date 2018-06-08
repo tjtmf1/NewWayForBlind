@@ -9,12 +9,19 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.Locale;
 
 public class NavigationActivity extends AppCompatActivity {
+
+    Animation alpha;
+    LinearLayout above, below;
+
     static final int STEP_CHANGED = 100;
     static final int STEP_COMPLETE = 300;
     static final int SOON = 6;
@@ -33,11 +40,15 @@ public class NavigationActivity extends AppCompatActivity {
     private boolean isNav = false;
     private boolean isAlert = false;
     private boolean isStraight = false;
+
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+
+        initAnimation();
+
         handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -70,6 +81,13 @@ public class NavigationActivity extends AppCompatActivity {
         imageView = (ImageView)findViewById(R.id.navigationImage);
         imageView.setImageResource(android.R.drawable.btn_star);
         init();
+    }
+
+    public void initAnimation() {
+        alpha = AnimationUtils.loadAnimation(this, R.anim.alpha);
+        above = (LinearLayout)findViewById(R.id.above);
+        below = (LinearLayout)findViewById(R.id.below);
+        above.startAnimation(alpha);
     }
     public void init(){
         Intent intent = getIntent();
