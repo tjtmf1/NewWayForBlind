@@ -18,7 +18,9 @@
 
         <activity android:name=".MainActivity">
         </activity>
-        <activity android:name=".SetStepActivity" />
+        <activity android:name=".SetStepActivity" >
+
+        </activity>
         <activity android:name=".NFindRoadActivity" />
         <activity android:name=".NavigationActivity" />
         <activity android:name=".OrientationTestActivity" />

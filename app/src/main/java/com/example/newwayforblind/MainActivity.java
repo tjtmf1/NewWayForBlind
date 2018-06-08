@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     Fragment_1 fragment_1;
     Fragment_2 fragment_2;
-    Fragment_3 fragment_3;
+    MapFragment fragment_3;
 
     MenuItem prevMenuItem;
 
@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         initialize();
         setBottomNavigation();
         setViewPager();
+
+        bottomNavigation.setSelectedItemId(R.id.action_fragment_2);
     }
 
     public void initialize() {
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragment_1 = new Fragment_1();
         fragment_2 = new Fragment_2();
-        fragment_3 = new Fragment_3();
+        fragment_3 = new MapFragment();
     }
 
     public void setBottomNavigation() {
@@ -60,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        bottomNavigation.setSelectedItemId(R.id.action_fragment_2);
     }
 
     public void setViewPager() {
