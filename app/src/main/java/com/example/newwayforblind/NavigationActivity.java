@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -35,6 +34,8 @@ public class NavigationActivity extends AppCompatActivity {
     private int routeLength;
     private Handler handler;
     private StepCheck stepCheck;
+    private Orientation orientation;
+    private OrientationCheck orientationCheck;
     private boolean ttsReady = false;
     private TextToSpeech tts;
     private int routeIndex;
@@ -79,6 +80,16 @@ public class NavigationActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == STEP_CHANGED) {
+                    String dir = orientationCheck.checkDirection(orientation.getOrientation());
+                    if(dir.equals("")){
+
+                    }else if(dir.equals("왼쪽")){
+
+                    }else if(dir.equals("오른쪽")){
+
+                    }else{
+
+                    }
                     Log.v("step", stepCheck.getStep() + "");
                     if (goalStep - stepCheck.getStep() <= SOON && !endPoint && !isAlert) {
                         tts.speak("잠시 후 " + route[routeIndex] + "방향입니다.", TextToSpeech.QUEUE_ADD, null, null);
@@ -86,7 +97,6 @@ public class NavigationActivity extends AppCompatActivity {
                         rotateArrow(route[routeIndex]);
                     }
                     if (stepCheck.getStep() >= STRAIGHT && !isStraight) {
-                        Toast.makeText(getApplicationContext(), "직진으로 변경", Toast.LENGTH_SHORT).show();
                         isStraight = true;
                         rotateArrow("직진");
                     }
@@ -98,6 +108,8 @@ public class NavigationActivity extends AppCompatActivity {
                 }
             }
         };
+
+        orientation = new Orientation(getApplicationContext());
 
         init();
     }
@@ -141,8 +153,10 @@ public class NavigationActivity extends AppCompatActivity {
 
     public void startNav(){
         stepCheck = new StepCheck(getApplicationContext(), handler);
+        orientationCheck = new OrientationCheck();
         routeIndex = 0;
         stepCheck.startSensor();
+        orientation.startSensor();
         goalStep = (int)(Integer.parseInt(route[1]) / stride + 0.5);
         if(route[routeIndex].equals("직진")){
             isStraight = true;
@@ -161,6 +175,7 @@ public class NavigationActivity extends AppCompatActivity {
 
     public void endNav(){
         stepCheck.endSensor();
+        orientation.endSensor();
         tts.speak("목적지에 도달하였습니다.", TextToSpeech.QUEUE_ADD, null, null);
     }
 
