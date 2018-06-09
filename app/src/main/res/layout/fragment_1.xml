@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:id="@+id/linearLayout"
+    tools:context=".Fragment_1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        android:paddingLeft="20dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:paddingTop="3dp"
+            android:src="@drawable/img_icon1"
+            android:tint="@color/colorWhite"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="길안내"
+            android:textSize="15dp"
+            android:textColor="@color/colorWhite"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editStart"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="15dp"
+        android:paddingLeft="20dp"
+        android:hint="출발지 입력"
+        android:focusable="false"
+        android:background="@drawable/selector_edittext"/>
+
+    <EditText
+        android:id="@+id/editDest"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginHorizontal="20dp"
+        android:paddingLeft="20dp"
+        android:hint="도착지 입력"
+        android:focusable="false"
+        android:background="@drawable/selector_edittext"/>
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgVoice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="70dp"
+            android:paddingBottom="130dp"
+            android:src="@drawable/img_voice"
+            android:tint="@color/colorWhite"
+            android:scaleType="fitCenter"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:paddingTop="400dp"
+            android:textSize="13dp"
+            android:text="출발지(도착지) 음성입력"
+            android:textColor="@color/colorWhite"/>
+    </FrameLayout>
+
+
+</LinearLayout>

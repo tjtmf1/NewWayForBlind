@@ -2,7 +2,6 @@ package com.example.newwayforblind;
 
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -25,7 +25,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,8 +53,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
-import static android.content.ContentValues.TAG;
+import java.util.Locale;
 
 
 /**
@@ -64,6 +64,11 @@ public class MapFragment extends Fragment
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
+
+    private LinearLayout linearLayout;
+    private ImageView arrowUp, arrowDown;
+    private boolean ttsReady = false;
+    private TextToSpeech tts;
 
     private static final LatLng DEFAULT_LOCATION = new LatLng(37.56, 126.97);
     private static final String TAG = "googlemap_example";
@@ -92,15 +97,13 @@ public class MapFragment extends Fragment
     private String[] LikelyPlaceNames = null;
     private LatLng[] LikelyLatLngs = null;
 
-    private Button startBtn;
-    private Button finishBtn;
     private TextView strideTv;
 
     private StepCheck stepCheck;
     private Handler mHandler;
-    public MapFragment()
-    {
-        // required
+
+    public MapFragment() {
+
     }
 
     public void setMarker(Location location, String markerTitle, int markerType) {
@@ -154,49 +157,68 @@ public class MapFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View layout = inflater.inflate(R.layout.fragment_map, container, false);
+
+        tts = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                ttsReady = true;
+                tts.setLanguage(Locale.KOREA);
+            }
+        });
+
+        linearLayout = (LinearLayout)layout.findViewById(R.id.linearLayout);
+        linearLayout.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+            public void onSwipeTop() {
+                if(startFlag == false) {
+                    tts.speak("보폭측정 시작.", TextToSpeech.QUEUE_ADD, null, null);
+
+                    setMarker(currentLocation, "START", START_MARKER);
+
+                    locations = new ArrayList<>();
+                    locations.add(new Location(currentLocation));
+
+                    stepCheck.startSensor();
+                    startFlag = true;
+                    finishFlag = false;
+
+                    arrowUp.setColorFilter(getResources().getColor(R.color.colorRed));
+                    arrowDown.setColorFilter(getResources().getColor(R.color.colorGreen));
+                }
+            }
+            public void onSwipeBottom() {
+                if(startFlag == true) {
+                    tts.speak("보폭측정 종료.", TextToSpeech.QUEUE_ADD, null, null);
+                    setMarker(currentLocation, "FINISH", FINISH_MARKER);
+
+                    Toast.makeText(getActivity(), stepCheck.getStep() + "", Toast.LENGTH_SHORT).show();
+
+                    stepCheck.endSensor();
+                    stepCheck.resetStep();
+                    startFlag = false;
+                    finishFlag = true;
+
+                    drawPolyline();
+                    calculateDistanceTravelled();
+
+                    Toast.makeText(getContext(), distanceTravelled + "", Toast.LENGTH_SHORT).show();
+
+                    locations = null;
+
+                    arrowDown.setColorFilter(getResources().getColor(R.color.colorWhite));
+                    arrowUp.setColorFilter(getResources().getColor(R.color.colorWhite));
+                }
+            }
+        });
+
+        arrowUp = (ImageView)layout.findViewById(R.id.arrowUp);
+        arrowDown = (ImageView)layout.findViewById(R.id.arrowDown);
 
         mapView = (MapView)layout.findViewById(R.id.map);
         mapView.getMapAsync(this);
 
-        startBtn = (Button) layout.findViewById(R.id.startBtn);
-        finishBtn = (Button) layout.findViewById(R.id.finishBtn);
         strideTv = (TextView) layout.findViewById(R.id.strideTv);
-
-        startBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setMarker(currentLocation, "START", START_MARKER);
-
-                locations = new ArrayList<>();
-                locations.add(new Location(currentLocation));
-
-                stepCheck.startSensor();
-                startFlag = true;
-                finishFlag = false;
-            }
-        });
-
-        finishBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setMarker(currentLocation, "FINISH", FINISH_MARKER);
-
-                Toast.makeText(getActivity(), stepCheck.getStep() + "", Toast.LENGTH_SHORT).show();
-
-                stepCheck.endSensor();
-                stepCheck.resetStep();
-                startFlag = false;
-                finishFlag = true;
-
-                drawPolyline();
-                calculateDistanceTravelled();
-
-                Toast.makeText(getContext(), distanceTravelled + "", Toast.LENGTH_SHORT).show();
-
-                locations = null;
-            }
-        });
 
         locations = new ArrayList<>();
 
