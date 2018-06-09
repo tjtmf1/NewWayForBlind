@@ -69,7 +69,7 @@ public class OrientationTestActivity extends AppCompatActivity {
             // 방향을 전환하지 않음
             if((a <= 360 && b <=ori && ori < a) || // a <= 360
                     (a > 360 && ((b<=ori&&ori<=360) || (0<=ori&&ori<=(a-CORRECTION))))){ // a > 360
-//                direction.setText("직진");
+                direction.setText("직진");
             }else{ // 방향을 전환 함
                 if(last - 180 + TURN_THRESHOLD <= ori && ori < last){
                     // 왼쪽
@@ -86,7 +86,7 @@ public class OrientationTestActivity extends AppCompatActivity {
             // 방향을 전환하지 않음
             if((b > 0 && b <= ori && ori < a) || // b > 0
                     (b <= 0 && (((b + CORRECTION) <= ori && ori <= 360) || (0 <= ori && ori <= a)))) { // b <= 0
-//                direction.setText("직진");
+                direction.setText("직진");
             }
             else{ // 방향을 전환 함
                 if(last <= ori && ori < last + 180 - TURN_THRESHOLD){
@@ -102,7 +102,7 @@ public class OrientationTestActivity extends AppCompatActivity {
             }
         }else if(90 <= last && last < 180){ //2사분면
             if(b<=ori && ori<=a){ // 방향을 전환하지 않음
-//                direction.setText("직진");
+                direction.setText("직진");
             }else{ // 방향을 전환 함
                 if(last <= ori && ori < last + 180 - TURN_THRESHOLD){
                     // 오른쪽
@@ -118,7 +118,7 @@ public class OrientationTestActivity extends AppCompatActivity {
             }
         }else if(180 <= last && last < 270){ // 3사분면
             if(b<=ori && ori<=a){ // 방향을 전환하지 않음
-//                direction.setText("직진");
+                direction.setText("직진");
             }else{ // 방향을 전환 함
                 if((d<0 && last < ori && ori <= d + 360) ||
                         (d>0 && ((0 <= ori && ori < d) || (last <= ori && ori <360)))){
