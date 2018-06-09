@@ -36,5 +36,5 @@ public class Orientation {
             sensorManager.unregisterListener(sensorEventListener);
     }
 
-    public int getOrientation(){return sensorEventListener.orientation[0];} //+ 180;}
+    public int getOrientation(){return sensorEventListener.orientation[0]+180;} //+ 180;}
 }

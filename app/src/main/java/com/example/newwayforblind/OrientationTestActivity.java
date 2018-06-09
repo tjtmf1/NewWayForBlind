@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class OrientationTestActivity extends AppCompatActivity {
 
@@ -20,10 +21,10 @@ public class OrientationTestActivity extends AppCompatActivity {
 
     int warningCount=0;
 
-    final int THRESHOLD=80;//임계치
+    final int THRESHOLD=65;//임계치
     final int CORRECTION=360;//보정
     final int ALLOW=4;//임계치를 넘는것을 허용하는 횟수
-    int pre=0;
+    int last=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,94 +43,96 @@ public class OrientationTestActivity extends AppCompatActivity {
                 Log.d("Handler", "");
                 step.setText(stepCheck.getStep() + "");
                 orientation.setText(mOrientation.getOrientation() + "");
-                String nowDir=checkHappiness(mOrientation.getOrientation());//한번 확인하면
-                //직진으로 setting
-                //direction.setText("직진");
+                checkHappiness(mOrientation.getOrientation());
+
+
             }
         };
         stepCheck = new StepCheck(getApplicationContext(), mHandler);
     }
 
-//    public void checkHappiness(int ori){
-//
-//        int b=last-THRESHOLD;
-//        int a=last+THRESHOLD;
-//        int warningCnt=0;
-//        /*
-//         * 보정작업
-//         * min이 음수가 되면 360을 더하고,
-//         * max가 양수가 되면 360을 뺀다.*/
-//
-//        if(a>360){ // 4사분면
-//            if((b<=ori&&ori<=360) || (0<=ori&&ori<=(a-CORRECTION))){ // 방향을 전환하지 않음
-//                direction.setText("직진");
-//            }else{ // 방향을 전환 함
-//                if(last - 180 <= ori && ori < last){
-//                    // 왼쪽
-//                    direction.setText("왼쪽");
-//                }else if((0 <= ori && ori < last - 180) || (last <= ori && ori < 360)){
-//                    // 오른쪽
-//                    direction.setText("오른쪽");
-//                }
-//            }
-//        }else if(b<0){ // 1사분면
-//            if((0<=ori&&ori<=a) || ((b+CORRECTION)<=ori&&ori<=360)){ // 방향을 전환하지 않음
-//                direction.setText("직진");
-//            }
-//            else{ // 방향을 전환 함
-//                if(last <= ori && ori < last - 180){
-//                    // 오른쪽
-//                    direction.setText("오른쪽");
-//                }else if((last - 180 <= ori && ori < 360) || (0 <= ori && ori < last)){
-//                    // 왼쪽
-//                    direction.setText("왼쪽");
-//                }
-//            }
-//        }else if(90 <= last && last < 180){ //2사분면
-//            if(b<=ori && ori<=a){ // 방향을 전환하지 않음
-//                direction.setText("직진");
-//            }else{ // 방향을 전환 함
-//                if(last <= ori && ori < last + 180){
-//                    // 오른쪽
-//                    direction.setText("오른쪽");
-//                }else if((0 <= ori && ori < last) || (last + 180 <= ori && ori < 360)){
-//                    // 왼쪽
-//                    direction.setText("왼쪽");
-//                }
-//            }
-//        }else if(180 <= last && last < 270){ // 3사분면
-//            if(b<=ori && ori<=a){ // 방향을 전환하지 않음
-//                direction.setText("직진");
-//            }else{ // 방향을 전환 함
-//                if((last <= ori && ori < 360) || (0 <= ori && ori < last - 180)){
-//                    // 오른쪽
-//                    direction.setText("오른쪽");
-//                }else if(last - 180 <= ori && ori < last){
-//                    // 왼쪽
-//                    direction.setText("왼쪽");
-//                }
-//            }
-//        }else if(270<=last && last <360){//4사분면
-//            if(b<=ori && ori<=a){
-//                //방향 전환 하지 않음
-//                direction.setText("직진");
-//            }else{
-//                //방향을 전환 함
-//                if (last-180<=ori && ori<last){
-//                    direction.setText("오른쪽");
-//                    //오른쪽
-//                }else if((last<=ori && ori<360) || (0<=ori && ori<last-180)){
-//                    //왼쪽
-//                    direction.setText("왼쪽");
-//                }
-//            }
-//        }else{
-//            Toast.makeText(this, "속해있지 않은 범위값, 범위 지정 오류", Toast.LENGTH_SHORT).show();
-//        }
-//
-//
-//
-//    }
+    public void checkHappiness(int ori){
+
+        int b=last-THRESHOLD;//
+        int a=last+THRESHOLD;
+        int warningCnt=0;
+        /*
+         * 보정작업
+         * min이 음수가 되면 360을 더하고,
+         * max가 양수가 되면 360을 뺀다.*/
+
+        if(a>360){ // 4사분면
+            if((b<=ori&&ori<=360) || (0<=ori&&ori<=(a-CORRECTION))){ // 방향을 전환하지 않음
+                direction.setText("직진");
+            }else{ // 방향을 전환 함
+                if(last - 180 <= ori && ori < last){
+                    // 왼쪽
+                    direction.setText("왼쪽");
+                }else if((0 <= ori && ori < last - 180) || (last <= ori && ori < 360)){
+                    // 오른쪽
+                    direction.setText("오른쪽");
+                }
+            }
+        }else if(b<0){ // 1사분면
+            if((0<=ori&&ori<=a) || ((b+CORRECTION)<=ori&&ori<=360)){ // 방향을 전환하지 않음
+                direction.setText("직진");
+            }
+            else{ // 방향을 전환 함
+                if(last <= ori && ori < last - 180){
+                    // 오른쪽
+                    direction.setText("오른쪽");
+                }else if((last - 180 <= ori && ori < 360) || (0 <= ori && ori < last)){
+                    // 왼쪽
+                    direction.setText("왼쪽");
+                }
+            }
+        }else if(90 <= last && last < 180){ //2사분면
+            if(b<=ori && ori<=a){ // 방향을 전환하지 않음
+                direction.setText("직진");
+            }else{ // 방향을 전환 함
+                if(last <= ori && ori < last + 180){
+                    // 오른쪽
+                    direction.setText("오른쪽");
+                }else if((0 <= ori && ori < last) || (last + 180 <= ori && ori < 360)){
+                    // 왼쪽
+                    direction.setText("왼쪽");
+                }
+            }
+        }else if(180 <= last && last < 270){ // 3사분면
+            if(b<=ori && ori<=a){ // 방향을 전환하지 않음
+                direction.setText("직진");
+            }else{ // 방향을 전환 함
+                if((last <= ori && ori < 360) || (0 <= ori && ori < last - 180)){
+                    // 오른쪽
+                    direction.setText("오른쪽");
+                }else if(last - 180 <= ori && ori < last){
+                    // 왼쪽
+                    direction.setText("왼쪽");
+                }
+            }
+        }else if(270<=last && last <=360){//4사분면
+            if(b<=ori && ori<=a){
+                //방향 전환 하지 않음
+                direction.setText("직진");
+            }else{
+                //방향을 전환 함
+                if (last-180<=ori && ori<last){
+                    direction.setText("오른쪽");
+                    //return "오른쪽";
+                    //오른쪽
+                }else if((last<=ori && ori<360) || (0<=ori && ori<last-180)){
+                    //왼쪽
+                    direction.setText("왼쪽");
+                   // return "왼쪽";
+                }
+            }
+        }else{
+            Toast.makeText(this, "속해있지 않은 범위값, 범위 지정 오류", Toast.LENGTH_SHORT).show();
+        }
+
+        last=ori;
+
+    }
 
     /*
     현재 방향 정보 반환 함수
@@ -139,79 +142,86 @@ public class OrientationTestActivity extends AppCompatActivity {
     2. pre와 now의 부호가 같은경우 그대로 적용 가능
 
      */
-    public String checkHappiness(int now){
-        String dir="";//현재 방향정보
-        int check=Math.abs(pre-now);
 
-        //부호 체크
-       if(pre*now>0&&pre!=0&&now!=0){ //부호가 같은 경우
-           //임계치 확인
-           if(check<=THRESHOLD){
-               //방향을 변동하지 않음
-               if(warningCount>0){
-                   warningCount--;
-               }
-           }else{
-               //방향 변동 flag ON
-               warningCount++;
-               if(warningCount>ALLOW){//허용 오차를 넘었을 경우 =>방향 변동 인식
-                   //오른쪽, 왼쪽 판단
-                   warningCount=0;//초기화
-                   if(pre<now){
-                       //오른쪽
-                       direction.setText("오른쪽");
-                       dir="오른쪽";
-                   }else{
-                       //왼쪽
-                       direction.setText("왼쪽");
-                       dir="왼쪽";
-                   }
-               }
-           }
-        }else if(pre*now<0&&pre!=0&&now!=0){
-           //부호가 다른 경우
-           if( (90<=now&&now<=180) && (-180<=pre&& pre<=90)){
-               //음수값을 양수로 보정
-               pre=pre+CORRECTION;
-               check=Math.abs(pre-now);
-               //임계치 확인
-               if(check<=THRESHOLD){
-                   //방향을 변동하지 않음
-                   if(warningCount>0){
-                       warningCount--;
-                   }
-               }else {//방향 변동 flag ON
-                   warningCount++;
-                   if (warningCount > ALLOW) {//허용 오차를 넘었을 경우 =>방향 변동 인식
-                       //무조건 왼쪽
-                       direction.setText("왼쪽");
-                       dir="왼쪽";
-                   }
-               }
-           }else if((90<=pre&&pre<=180) && (-180<=now&& now<=90) ){
-                //음수값을 양수로 보정
-               now=now+CORRECTION;
-               check=Math.abs(pre-now);
-               //임계치 확인
-               if(check<=THRESHOLD){
-                   //방향을 변동하지 않음
-                   if(warningCount>0){
-                       warningCount--;
-                   }
-               }else {//방향 변동 flag ON
-                   warningCount++;
-                   if (warningCount > ALLOW) {//허용 오차를 넘었을 경우 =>방향 변동 인식
-                       //무조건 오른쪽
-                       direction.setText("오른쪽");
-                       dir="오른쪽";
-                   }
-               }
-           }
-
-        }
-        pre=now;
-        return dir;//현재 방향정보를 return
-    }
+//    public String checkHappiness(int now){
+//
+//        String dir="";//현재 방향정보
+//        String str=step.getText().toString();
+//        int stepCheck=Integer.parseInt(str);
+//
+//            pre=now;
+//
+//                int check=Math.abs(pre-now);
+//
+//                //부호 체크
+//                if(pre*now>0&&pre!=0&&now!=0){ //부호가 같은 경우
+//                    //임계치 확인
+//                    if(check<=THRESHOLD){
+//                        //방향을 변동하지 않음
+//                        if(warningCount>0){
+//                            warningCount--;
+//                        }
+//                    }else{
+//                        //방향 변동 flag ON
+//                        warningCount++;
+//                        if(warningCount>ALLOW){//허용 오차를 넘었을 경우 =>방향 변동 인식
+//                            //오른쪽, 왼쪽 판단
+//                            warningCount=0;//초기화
+//                            if(pre<now){
+//                                //오른쪽
+//                                direction.setText("오른쪽");
+//                                dir="오른쪽";
+//                            }else{
+//                                //왼쪽
+//                                direction.setText("왼쪽");
+//                                dir="왼쪽";
+//                            }
+//                        }
+//                    }
+//                }else if(pre*now<0&&pre!=0&&now!=0){
+//                    //부호가 다른 경우
+//                    if( (90<=now&&now<=180) && (-180<=pre&& pre<=90)){
+//                        //음수값을 양수로 보정
+//                        pre=pre+CORRECTION;
+//                        check=Math.abs(pre-now);
+//                        //임계치 확인
+//                        if(check<=THRESHOLD){
+//                            //방향을 변동하지 않음
+//                            if(warningCount>0){
+//                                warningCount--;
+//                            }
+//                        }else {//방향 변동 flag ON
+//                            warningCount++;
+//                            if (warningCount > ALLOW) {//허용 오차를 넘었을 경우 =>방향 변동 인식
+//                                //무조건 왼쪽
+//                                direction.setText("왼쪽");
+//                                dir="왼쪽";
+//                            }
+//                        }
+//                    }else if((90<=pre&&pre<=180) && (-180<=now&& now<=90) ){
+//                        //음수값을 양수로 보정
+//                        now=now+CORRECTION;
+//                        check=Math.abs(pre-now);
+//                        //임계치 확인
+//                        if(check<=THRESHOLD){
+//                            //방향을 변동하지 않음
+//                            if(warningCount>0){
+//                                warningCount--;
+//                            }
+//                        }else {//방향 변동 flag ON
+//                            warningCount++;
+//                            if (warningCount > ALLOW) {//허용 오차를 넘었을 경우 =>방향 변동 인식
+//                                //무조건 오른쪽
+//                                direction.setText("오른쪽");
+//                                dir="오른쪽";
+//                            }
+//                        }
+//                    }
+//
+//                }
+//
+//        return dir;//현재 방향정보를 return
+//    }
     public void onStart(View view) {
         stepCheck.startSensor();
         mOrientation.startSensor();
