@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -45,6 +44,8 @@ public class NavigationActivity extends AppCompatActivity {
     private boolean isNav = false;
     private boolean isAlert = false;
     private boolean isStraight = false;
+    private boolean isCorrectDir = true;
+    private String curDirection;
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -81,30 +82,51 @@ public class NavigationActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 if (msg.what == STEP_CHANGED) {
                     String dir = orientationCheck.checkDirection(orientation.getOrientation());
-                    if(dir.equals("")){
-
-                    }else if(dir.equals("왼쪽")){
-
-                    }else if(dir.equals("오른쪽")){
-
-                    }else{
-
+                    if(!curDirection.equals("직진")) {
+                        if (dir.equals("왼쪽")) {                     //사용자의 진행 방향이 왼쪽
+                            if(!curDirection.equals("왼쪽")){         //가야 할 방향이 왼쪽이 아니면
+                                if(isCorrectDir){                     //틀린 방향이라고 아직 인식하지 못한 상태면
+                                    if(ttsReady){
+                                        tts.speak("잘못된 방향입니다. 뒤로 돌아주세요", TextToSpeech.QUEUE_ADD, null,null);
+                                        isCorrectDir = false;
+                                    }
+                                }
+                            }
+                        } else if (dir.equals("오른쪽")) {
+                            if(!curDirection.equals("오른쪽")){
+                                if(isCorrectDir){
+                                    if(ttsReady){
+                                        tts.speak("잘못된 방향입니다. 뒤로 돌아주세요", TextToSpeech.QUEUE_ADD, null,null);
+                                        isCorrectDir = false;
+                                    }
+                                }
+                            }
+                        } else if(dir.equals("뒤돌기")){               //사용자가 뒤를 돌고
+                            if(!isCorrectDir){                         //현재 잘못된 진행 방향이면
+                                goalStep += stepCheck.getStep();       //잘못 걸어온 걸음수 만큼 추가하고
+                                stepCheck.resetStep();                 //걸음 수를 초기화 한 후
+                                stepCheck.setStepCount(goalStep);      //목표 걸음수를 다시 설정
+                                tts.speak("직진으로 " + goalStep + "걸음 가세요.", TextToSpeech.QUEUE_ADD, null,null);
+                                isCorrectDir = true;
+                            }
+                        }
                     }
-                    Log.v("step", stepCheck.getStep() + "");
-                    if (goalStep - stepCheck.getStep() <= SOON && !endPoint && !isAlert) {
+                    if (isCorrectDir && goalStep - stepCheck.getStep() <= SOON && !endPoint && !isAlert) {
                         tts.speak("잠시 후 " + route[routeIndex] + "방향입니다.", TextToSpeech.QUEUE_ADD, null, null);
                         isAlert = true;
                         rotateArrow(route[routeIndex]);
                     }
-                    if (stepCheck.getStep() >= STRAIGHT && !isStraight) {
+                    if (isCorrectDir && stepCheck.getStep() >= STRAIGHT && !isStraight) {
                         isStraight = true;
                         rotateArrow("직진");
                     }
                 } else if (msg.what == STEP_COMPLETE) {
-                    if (!endPoint)
-                        arrivePoint();
-                    else
-                        endNav();
+                    if(isCorrectDir) {
+                        if (!endPoint)
+                            arrivePoint();
+                        else
+                            endNav();
+                    }
                 }
             }
         };
@@ -157,6 +179,7 @@ public class NavigationActivity extends AppCompatActivity {
         routeIndex = 0;
         stepCheck.startSensor();
         orientation.startSensor();
+        curDirection = route[0];
         goalStep = (int)(Integer.parseInt(route[1]) / stride + 0.5);
         if(route[routeIndex].equals("직진")){
             isStraight = true;
@@ -180,16 +203,26 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void arrivePoint(){
+        curDirection = route[routeIndex];
         goalStep = Integer.parseInt(route[routeIndex + 1]);
         stepCheck.resetStep();
         while(true) {
             if (ttsReady) {
-                String text = route[routeIndex];
-                text += "으로 " + goalStep + "걸음 가세요.";
+                isAlert = false;
+                String text = route[routeIndex] + "으로 " + goalStep + "걸음 가세요.";
+                if(routeIndex +2 == routeLength){
+                    endPoint = true;
+                    text = route[routeIndex] + "으로" + goalStep + "걸음 후 목적지입니다.";
+                }
+                if(goalStep <= SOON){
+                    isAlert = true;
+                    if((routeIndex + 2) != routeLength){
+                        text = route[routeIndex] + "으로" + goalStep + "걸음 후 " + route[routeIndex + 2] + "방향입니다.";
+                    }
+                }
                 tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
                 stepCheck.setStepCount(goalStep);
                 routeIndex += 2;
-                isAlert = false;
                 isStraight = false;
                 break;
             }
