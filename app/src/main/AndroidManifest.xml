@@ -25,13 +25,16 @@
         </activity>
         <activity android:name=".NFindRoadActivity" />
         <activity android:name=".NavigationActivity" />
-        <activity android:name=".OrientationTestActivity" />
-        <activity android:name=".IntroActivity">
+        <activity android:name=".OrientationTestActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".IntroActivity">
+
         </activity>
     </application>
 
