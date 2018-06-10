@@ -686,7 +686,7 @@ public class NFindRoadActivity extends AppCompatActivity {
 
         Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
         Toast.makeText(this, "경로 : "+ result, Toast.LENGTH_LONG).show();
-        result="직진/15/오른쪽/6/왼쪽/15/";
+        //result="직진/15/오른쪽/6/왼쪽/15/";
         //text_result.setText(result);
         intent.putExtra("route", result);
         startActivity(intent);
