@@ -145,7 +145,6 @@ public class NavigationActivity extends AppCompatActivity {
         if(direction.equals("오른쪽")) {
             blinkArrow.setImageResource(R.drawable.img_arrow2);
         }
-
         else if(direction.equals("왼쪽")) {
             blinkArrow.setImageResource(R.drawable.img_arrow3);
         }
@@ -216,6 +215,7 @@ public class NavigationActivity extends AppCompatActivity {
                 goal.setText(goalStep + " 걸음");
                 isAlert = false;
                 String text = route[routeIndex] + "으로 " + goalStep + "걸음 가세요.";
+                setArrow(route[routeIndex]);
                 if(routeIndex +2 == routeLength){
                     endPoint = true;
                     text = route[routeIndex] + "으로" + goalStep + "걸음 후 목적지입니다.";
