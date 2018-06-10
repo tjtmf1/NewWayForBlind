@@ -19,11 +19,7 @@
             android:value="AIzaSyDGsgiwY3QwoA9VSBK4HSpbkSvdXURdxYA" />
 
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".SetStepActivity" >
 
@@ -34,7 +30,11 @@
         </activity>
 
         <activity android:name=".IntroActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

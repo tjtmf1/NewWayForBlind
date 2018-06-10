@@ -65,9 +65,10 @@
             android:src="@drawable/img_foot" />
 
         <TextView
+            android:id="@+id/goal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="35dp"
             android:text="15 걸음"
             android:textAlignment="center"
             android:textSize="18dp"
@@ -107,7 +108,7 @@
             android:id="@+id/blinkArrow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/img_arrow_dot"
+            android:src="@drawable/img_arrow1"
             android:adjustViewBounds="true"
             android:paddingBottom="40dp"/>
 

@@ -101,7 +101,7 @@ public class Fragment_1 extends Fragment {
 
                 Intent intent = new Intent(getContext(), NavigationActivity.class);
                 //Toast.makeText(this, "경로 : "+ result, Toast.LENGTH_LONG).show();
-                result="직진/15/오른쪽/6/왼쪽/15/";
+                //result="직진/15/오른쪽/6/왼쪽/15/";
                 //text_result.setText(result);
                 intent.putExtra("route", result);
                 startActivity(intent);
@@ -595,14 +595,16 @@ public class Fragment_1 extends Fragment {
 						-입구B->105
 						-105->101
 						*/
-                            search("105", 2, 0);
-                            findRoad(start, destination, 1, 1);	//1
-                            //105->입구B
-                            findRoad(start, "입구B", 1, 3);
-                            search("입구B", 1, 0);
-                            search("도서관", 2, 0);
-                            //cout<<""
-                            findRoad(start, destination, 3, 4);	//분기
+//                            search("105", 2, 0);
+//                            result+="직진/";
+//                            findRoad(start, destination, 1, 1);	//1
+//                            //105->입구B
+//                            findRoad(start, "입구B", 1, 3);
+//                            search("입구B", 1, 0);
+//                            search("도서관", 2, 0);
+//                            //cout<<""
+//                            findRoad(start, destination, 3, 4);	//분기
+                            result+="직진/18/오른쪽/70";
                             return;
                         }
                     }
@@ -737,14 +739,14 @@ public class Fragment_1 extends Fragment {
 			3->1의 경우 이하동문
 
 			*/
-                search("입구B", 3, 0);
+
                 for (int i = 0; i < tree[start_treeNum - 1].list[dest_i].lsize; i++) {
                     if (tree[start_treeNum - 1].list[dest_i].left[i].equals(start)) {
                         //107->입구B쪽으로 가는길, 왼쪽 꺾기
 
                         //text_result.setText( text_result.getText()+"\n"+"왼쪽 방향으로 꺾으세요.\n");
                         result+= "왼쪽/";
-
+                        search("입구B", 3, 0);
                         st_idx = dest_i;
                         start_treeNum = 3;
                         search(destination, 2, 0);
@@ -758,7 +760,7 @@ public class Fragment_1 extends Fragment {
 
                         //text_result.setText( text_result.getText()+"오른쪽 방향으로 꺾으세요.\n");
                         result+= "오른쪽/";
-
+                        search("입구B", 3, 0);
                         st_idx = dest_i;
                         search(destination, 2, 0);
                         start_treeNum = 3;
