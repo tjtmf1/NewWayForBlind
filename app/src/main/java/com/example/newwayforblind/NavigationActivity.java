@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -82,6 +83,7 @@ public class NavigationActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 if (msg.what == STEP_CHANGED) {
                     String dir = orientationCheck.checkDirection(orientation.getOrientation());
+                    Log.v("direction", dir + "      " + orientation.getOrientation());
                     if(!curDirection.equals("직진")) {
                         if (dir.equals("왼쪽")) {                     //사용자의 진행 방향이 왼쪽
                             if(!curDirection.equals("왼쪽")){         //가야 할 방향이 왼쪽이 아니면

@@ -41,7 +41,7 @@ public class SensorListener implements SensorEventListener {
             handler.sendMessage(msg);
             Log.d("STEP_COUNTER", event.values[0]+"");
         }
-        else if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+        else if(event.sensor.getType() == Sensor.TYPE_GRAVITY){
             mGravity = event.values;
         }
         else if(event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
