@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -35,8 +34,8 @@ public class Fragment_1 extends Fragment {
     SpeechRecognizer mRecognizer;
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
     boolean voiceFlag = false;
+    boolean errorFlag = false;
     ImageView imgVoice;
-    private boolean ttsReady = false;
     private TextToSpeech tts;
 
     public static final int MAX_NODE = 50;
@@ -66,7 +65,6 @@ public class Fragment_1 extends Fragment {
         tts = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                ttsReady = true;
                 tts.setLanguage(Locale.KOREA);
             }
         });
@@ -84,27 +82,33 @@ public class Fragment_1 extends Fragment {
             }
 
             public void onSwipeBottom() {
-                tts.speak("화면을 더블 탭 하면 안내를 시작합니다.", TextToSpeech.QUEUE_ADD, null, null);
+
                 text_result.setText("");
                 result="";
 
                 String st=edit_start.getText().toString();
                 String dt=edit_dest.getText().toString();
 
-                int start_dest=1;    //true일때 start, false일 때 dest
-                int start_treeID=search(st, 1, 0);
-                start_dest=2;
-                int dest_treeID = search(dt, 2, 0);
+                if(!st.equals("") && !dt.equals("")) {
+                    tts.speak("안내를 시작합니다.", TextToSpeech.QUEUE_ADD, null, null);
+                    int start_dest=1;    //true일때 start, false일 때 dest
+                    int start_treeID=search(st, 1, 0);
+                    start_dest=2;
+                    int dest_treeID = search(dt, 2, 0);
 
-                //길찾기 ㄱㄱ
-                findRoad(st, dt, start_treeID, dest_treeID);
+                    //길찾기 ㄱㄱ
+                    findRoad(st, dt, start_treeID, dest_treeID);
 
-                Intent intent = new Intent(getContext(), NavigationActivity.class);
-                //Toast.makeText(this, "경로 : "+ result, Toast.LENGTH_LONG).show();
-                //result="직진/15/오른쪽/6/왼쪽/15/";
-                //text_result.setText(result);
-                intent.putExtra("route", result);
-                startActivity(intent);
+                    Intent intent = new Intent(getContext(), NavigationActivity.class);
+                    //Toast.makeText(this, "경로 : "+ result, Toast.LENGTH_LONG).show();
+                    //result="직진/15/오른쪽/6/왼쪽/15/";
+                    //text_result.setText(result);
+                    intent.putExtra("route", result);
+                    startActivity(intent);
+                }
+                else {
+                    tts.speak("출발지와 목적지를 다시 입력해 주세요.", TextToSpeech.QUEUE_ADD, null, null);
+                }
             }
         });
 
@@ -158,7 +162,9 @@ public class Fragment_1 extends Fragment {
 
         @Override
         public void onError(int i) {
-            edit_start.setText("에러");
+            edit_start.setText("");
+            edit_dest.setText("");
+            voiceFlag = false;
         }
 
         @Override
@@ -172,13 +178,11 @@ public class Fragment_1 extends Fragment {
 
             if(voiceFlag == false) {
                 edit_start.setText(input[0]);
-                Toast.makeText(getContext(), "출발지 입력 완료", Toast.LENGTH_SHORT).show();
                 voiceFlag = true;
                 mRecognizer.startListening(intent);
             }
             else if(voiceFlag == true) {
                 edit_dest.setText(input[0]);
-                Toast.makeText(getContext(), "도착지 입력 완료", Toast.LENGTH_SHORT).show();
                 voiceFlag = false;
                 imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
             }
@@ -186,6 +190,7 @@ public class Fragment_1 extends Fragment {
 
         @Override
         public void onPartialResults(Bundle bundle) {
+
         }
 
         @Override

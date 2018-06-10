@@ -17,15 +17,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class NavigationActivity extends AppCompatActivity {
 
-    Animation alpha, blink;
-    LinearLayout above, below;
-    FrameLayout doubleTap;
-    TextView blinkText;
-    ImageView blinkArrow;
-    TextView goal;
+    private Animation alpha, blink;
+    private LinearLayout above, below;
+    private FrameLayout doubleTap;
+    private TextView blinkText;
+    private ImageView blinkArrow;
+    private TextView goal;
 
     static final int STEP_CHANGED = 100;
     static final int STEP_COMPLETE = 300;
@@ -141,6 +143,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         orientation = new Orientation(getApplicationContext());
 
+
         init();
     }
 
@@ -194,6 +197,7 @@ public class NavigationActivity extends AppCompatActivity {
         while(true) {
             if (ttsReady) {
                 String text = route[routeIndex];
+                goal.setText(goalStep + " 걸음");
                 text += "으로 " + goalStep + "걸음 가세요.";
                 tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
                 stepCheck.setStepCount(goalStep);
@@ -206,7 +210,20 @@ public class NavigationActivity extends AppCompatActivity {
     public void endNav(){
         stepCheck.endSensor();
         orientation.endSensor();
-        tts.speak("목적지에 도달하였습니다.", TextToSpeech.QUEUE_ADD, null, null);
+
+        tts.speak("목적지에 도착 하였습니다. 잠시 후 메인화면으로 돌아갑니다.", TextToSpeech.QUEUE_ADD, null, null);
+        CustomDialog dialog = new CustomDialog(this);
+        dialog.show();
+
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                finish();
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(timerTask, 5500);
+
     }
 
     public void arrivePoint(){
