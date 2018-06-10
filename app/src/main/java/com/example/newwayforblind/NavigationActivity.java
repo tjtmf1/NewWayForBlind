@@ -24,6 +24,7 @@ public class NavigationActivity extends AppCompatActivity {
     FrameLayout doubleTap;
     TextView blinkText;
     ImageView blinkArrow;
+    TextView goal;
 
     static final int STEP_CHANGED = 100;
     static final int STEP_COMPLETE = 300;
@@ -60,6 +61,8 @@ public class NavigationActivity extends AppCompatActivity {
                 tts.setLanguage(Locale.KOREA);
             }
         });
+
+        goal = (TextView)findViewById(R.id.goal);
 
         doubleTap = (FrameLayout) findViewById(R.id.doubleTap);
         doubleTap.setOnTouchListener(new OnSwipeTouchListener(this) {
@@ -114,11 +117,11 @@ public class NavigationActivity extends AppCompatActivity {
                     if (isCorrectDir && goalStep - stepCheck.getStep() <= SOON && !endPoint && !isAlert) {
                         tts.speak("잠시 후 " + route[routeIndex] + "방향입니다.", TextToSpeech.QUEUE_ADD, null, null);
                         isAlert = true;
-                        rotateArrow(route[routeIndex]);
+                        setArrow(route[routeIndex]);
                     }
                     if (isCorrectDir && stepCheck.getStep() >= STRAIGHT && !isStraight) {
                         isStraight = true;
-                        rotateArrow("직진");
+                        setArrow("직진");
                     }
                 } else if (msg.what == STEP_COMPLETE) {
                     if(isCorrectDir) {
@@ -136,16 +139,16 @@ public class NavigationActivity extends AppCompatActivity {
         init();
     }
 
-    public void rotateArrow(String direction) {
+    public void setArrow(String direction) {
         if(direction.equals("오른쪽")) {
-            blinkArrow.setRotation(90);
+            blinkArrow.setImageResource(R.drawable.img_arrow2);
         }
 
         else if(direction.equals("왼쪽")) {
-            blinkArrow.setRotation(-90);
+            blinkArrow.setImageResource(R.drawable.img_arrow3);
         }
         else if(direction.equals("직진")) {
-            blinkArrow.setRotation(0);
+            blinkArrow.setImageResource(R.drawable.img_arrow1);
         }
     }
 
@@ -208,6 +211,7 @@ public class NavigationActivity extends AppCompatActivity {
         stepCheck.resetStep();
         while(true) {
             if (ttsReady) {
+                goal.setText(goalStep + " 걸음");
                 isAlert = false;
                 String text = route[routeIndex] + "으로 " + goalStep + "걸음 가세요.";
                 if(routeIndex +2 == routeLength){
