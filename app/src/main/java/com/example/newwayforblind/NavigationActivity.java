@@ -211,7 +211,7 @@ public class NavigationActivity extends AppCompatActivity {
         stepCheck.endSensor();
         orientation.endSensor();
 
-        tts.speak("목적지에 도착 하였습니다. 잠시 후 메인화면으로 돌아갑니다.", TextToSpeech.QUEUE_ADD, null, null);
+        tts.speak("목적지에 도착했습니다. 잠시 후 메인화면으로 돌아갑니다.", TextToSpeech.QUEUE_ADD, null, null);
         CustomDialog dialog = new CustomDialog(this);
         dialog.show();
 
