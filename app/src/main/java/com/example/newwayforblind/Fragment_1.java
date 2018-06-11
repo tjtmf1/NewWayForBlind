@@ -32,9 +32,10 @@ public class Fragment_1 extends Fragment {
 
     Intent intent;
     SpeechRecognizer mRecognizer;
+    SpeechRecognizer mRecognizer2;
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
-    boolean voiceFlag = false;
     boolean errorFlag = false;
+    boolean errorFlag2 = false;
     ImageView imgVoice;
     private TextToSpeech tts;
 
@@ -136,6 +137,8 @@ public class Fragment_1 extends Fragment {
 
         mRecognizer = SpeechRecognizer.createSpeechRecognizer(getContext());
         mRecognizer.setRecognitionListener(recognitionListener);
+        mRecognizer2 = SpeechRecognizer.createSpeechRecognizer(getContext());
+        mRecognizer2.setRecognitionListener(recognitionListener2);
     }
 
     private RecognitionListener recognitionListener = new RecognitionListener() {
@@ -162,9 +165,16 @@ public class Fragment_1 extends Fragment {
 
         @Override
         public void onError(int i) {
-            edit_start.setText("");
-            edit_dest.setText("");
-            voiceFlag = false;
+            if(errorFlag == false) {
+                errorFlag = true;
+                edit_start.setText("");
+                edit_dest.setText("");
+                imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
+                tts.speak("음성입력을 다시 해주세요.", TextToSpeech.QUEUE_ADD, null, null);
+            }
+            else if(errorFlag == true) {
+                errorFlag = false;
+            }
         }
 
         @Override
@@ -176,16 +186,67 @@ public class Fragment_1 extends Fragment {
             String[] input = new String[voice.size()];
             voice.toArray(input);
 
-            if(voiceFlag == false) {
-                edit_start.setText(input[0]);
-                voiceFlag = true;
-                mRecognizer.startListening(intent);
-            }
-            else if(voiceFlag == true) {
-                edit_dest.setText(input[0]);
-                voiceFlag = false;
+            edit_start.setText(input[0]);
+            mRecognizer2.startListening(intent);
+        }
+
+        @Override
+        public void onPartialResults(Bundle bundle) {
+
+        }
+
+        @Override
+        public void onEvent(int i, Bundle bundle) {
+        }
+    };
+
+    private RecognitionListener recognitionListener2 = new RecognitionListener() {
+        @Override
+        public void onReadyForSpeech(Bundle bundle) {
+
+        }
+
+        @Override
+        public void onBeginningOfSpeech() {
+        }
+
+        @Override
+        public void onRmsChanged(float v) {
+        }
+
+        @Override
+        public void onBufferReceived(byte[] bytes) {
+        }
+
+        @Override
+        public void onEndOfSpeech() {
+        }
+
+        @Override
+        public void onError(int i) {
+            if(errorFlag2 == false) {
+                errorFlag2 = true;
+                edit_start.setText("");
+                edit_dest.setText("");
                 imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
+                tts.speak("음성입력을 다시 해주세요.", TextToSpeech.QUEUE_ADD, null, null);
             }
+            else if(errorFlag2 == true) {
+                errorFlag2 = false;
+            }
+        }
+
+        @Override
+        public void onResults(Bundle bundle) {
+
+            String key = SpeechRecognizer.RESULTS_RECOGNITION;
+            ArrayList<String> voice = bundle.getStringArrayList(key);
+
+            String[] input = new String[voice.size()];
+            voice.toArray(input);
+
+            edit_dest.setText(input[0]);
+            imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
         }
 
         @Override
