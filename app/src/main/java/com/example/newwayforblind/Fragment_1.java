@@ -34,8 +34,6 @@ public class Fragment_1 extends Fragment {
     SpeechRecognizer mRecognizer;
     SpeechRecognizer mRecognizer2;
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
-    boolean errorFlag = false;
-    boolean errorFlag2 = false;
     ImageView imgVoice;
     private TextToSpeech tts;
 
@@ -165,16 +163,43 @@ public class Fragment_1 extends Fragment {
 
         @Override
         public void onError(int i) {
-            if(errorFlag == false) {
-                errorFlag = true;
-                edit_start.setText("");
-                edit_dest.setText("");
-                imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
-                tts.speak("음성입력을 다시 해주세요.", TextToSpeech.QUEUE_ADD, null, null);
-            }
-            else if(errorFlag == true) {
-                errorFlag = false;
-            }
+            /*switch (i) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    edit_start.setText("");
+                    edit_dest.setText("");
+                    imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
+                    tts.speak("녹음 에러.", TextToSpeech.QUEUE_ADD, null, null);
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    edit_start.setText("");
+                    edit_dest.setText("");
+                    imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
+                    tts.speak("음성 없음", TextToSpeech.QUEUE_ADD, null, null);
+                    break;
+                case 7:
+                    edit_start.setText("");
+                    edit_dest.setText("");
+                    imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
+                    tts.speak("적당한 결과 없음", TextToSpeech.QUEUE_ADD, null, null);
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    break;
+            }*/
+
+            edit_start.setText("");
+            edit_dest.setText("");
+            imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
+            tts.speak("음성입력을 다시 해주세요.", TextToSpeech.QUEUE_ADD, null, null);
         }
 
         @Override
@@ -224,16 +249,43 @@ public class Fragment_1 extends Fragment {
 
         @Override
         public void onError(int i) {
-            if(errorFlag2 == false) {
-                errorFlag2 = true;
-                edit_start.setText("");
-                edit_dest.setText("");
-                imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
-                tts.speak("음성입력을 다시 해주세요.", TextToSpeech.QUEUE_ADD, null, null);
-            }
-            else if(errorFlag2 == true) {
-                errorFlag2 = false;
-            }
+            /*switch (i) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    edit_start.setText("");
+                    edit_dest.setText("");
+                    imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
+                    tts.speak("녹음 에러.", TextToSpeech.QUEUE_ADD, null, null);
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    edit_start.setText("");
+                    edit_dest.setText("");
+                    imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
+                    tts.speak("음성 없음", TextToSpeech.QUEUE_ADD, null, null);
+                    break;
+                case 7:
+                    edit_start.setText("");
+                    edit_dest.setText("");
+                    imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
+                    tts.speak("적당한 결과 없음", TextToSpeech.QUEUE_ADD, null, null);
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    break;
+            }*/
+
+            edit_start.setText("");
+            edit_dest.setText("");
+            imgVoice.setColorFilter(getResources().getColor(R.color.colorWhite));
+            tts.speak("음성입력을 다시 해주세요.", TextToSpeech.QUEUE_ADD, null, null);
         }
 
         @Override
