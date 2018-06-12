@@ -17,15 +17,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class NavigationActivity extends AppCompatActivity {
 
-    Animation alpha, blink;
-    LinearLayout above, below;
-    FrameLayout doubleTap;
-    TextView blinkText;
-    ImageView blinkArrow;
-    TextView goal;
+    private Animation alpha, blink;
+    private LinearLayout above, below;
+    private FrameLayout doubleTap;
+    private TextView blinkText;
+    private ImageView blinkArrow;
+    private TextView goal;
 
     static final int STEP_CHANGED = 100;
     static final int STEP_COMPLETE = 300;
@@ -86,7 +88,7 @@ public class NavigationActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 if (msg.what == STEP_CHANGED) {
                     String dir = "";
-                    if(stepCheck.getStep() >= 3)
+                    if(stepCheck.getStep() >= 4)
                         dir = orientationCheck.checkDirection(orientation.getOrientation());
                     Log.v("direction", dir + "      " + orientation.getOrientation());
                     if(!curDirection.equals("직진")) {
@@ -110,7 +112,7 @@ public class NavigationActivity extends AppCompatActivity {
                             }
                         } else if(dir.equals("뒤돌기")){               //사용자가 뒤를 돌고
                             if(!isCorrectDir){                         //현재 잘못된 진행 방향이면
-                                goalStep += stepCheck.getStep() - 6;   //잘못 걸어온 걸음수 만큼 추가하고 (뒤돌아서 인식되는 시점은 이미 6걸음을 간 상태)
+                                goalStep += stepCheck.getStep() - 13;   //잘못 걸어온 걸음수 만큼 추가하고 (뒤돌아서 인식되는 시점은 이미 6걸음을 간 상태)
                                 stepCheck.resetStep();                 //걸음 수를 초기화 한 후
                                 stepCheck.setStepCount(goalStep);      //목표 걸음수를 다시 설정
                                 tts.speak("직진으로 " + goalStep + "걸음 가세요.", TextToSpeech.QUEUE_ADD, null,null);
@@ -140,6 +142,7 @@ public class NavigationActivity extends AppCompatActivity {
         };
 
         orientation = new Orientation(getApplicationContext());
+
 
         init();
     }
@@ -194,6 +197,7 @@ public class NavigationActivity extends AppCompatActivity {
         while(true) {
             if (ttsReady) {
                 String text = route[routeIndex];
+                goal.setText(goalStep + " 걸음");
                 text += "으로 " + goalStep + "걸음 가세요.";
                 tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
                 stepCheck.setStepCount(goalStep);
@@ -206,7 +210,20 @@ public class NavigationActivity extends AppCompatActivity {
     public void endNav(){
         stepCheck.endSensor();
         orientation.endSensor();
-        tts.speak("목적지에 도달하였습니다.", TextToSpeech.QUEUE_ADD, null, null);
+
+        tts.speak("목적지에 도착했습니다. 잠시 후 메인화면으로 돌아갑니다.", TextToSpeech.QUEUE_ADD, null, null);
+        CustomDialog dialog = new CustomDialog(this);
+        dialog.show();
+
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                finish();
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(timerTask, 5500);
+
     }
 
     public void arrivePoint(){

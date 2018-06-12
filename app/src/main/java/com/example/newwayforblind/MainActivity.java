@@ -2,6 +2,7 @@ package com.example.newwayforblind;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     MapFragment fragment_3;
 
     MenuItem prevMenuItem;
+
+    private TextToSpeech tts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
         fragment_1 = new Fragment_1();
         fragment_2 = new Fragment_2();
         fragment_3 = new MapFragment();
+
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                tts.setLanguage(Locale.KOREA);
+            }
+        });
     }
 
     public void setBottomNavigation() {
@@ -83,6 +95,17 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("page", "onPageSelected: " + position);
                 bottomNavigation.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottomNavigation.getMenu().getItem(position);
+                switch (position) {
+                    case 0:
+                        tts.speak("길안내 페이지", TextToSpeech.QUEUE_ADD, null, null);
+                        break;
+                    case 1:
+                        tts.speak("초행길 페이지", TextToSpeech.QUEUE_ADD, null, null);
+                        break;
+                    case 2:
+                        tts.speak("보폭측정 페이지", TextToSpeech.QUEUE_ADD, null, null);
+                        break;
+                }
             }
 
             @Override
