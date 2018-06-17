@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,6 +51,12 @@ public class NavigationActivity extends AppCompatActivity {
     private boolean isStraight = false;
     private boolean isCorrectDir = true;
     private String curDirection;
+    private int divergenceCnt = 0;
+    private int whereStair;
+    private boolean isStair = false;
+    private int whereStairStep;
+    private String whereStairSide;
+    private int curDivergence = 0;
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -82,20 +89,34 @@ public class NavigationActivity extends AppCompatActivity {
             }
         });
 
+
+
         handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == STEP_CHANGED) {
                     String dir = "";
-                    if(stepCheck.getStep() >= 3)
+                    Log.v("test", "Step : " + stepCheck.getStep());
+                    if(stepCheck.getStep() >= 4)
                         dir = orientationCheck.checkDirection(orientation.getOrientation());
+                    if(isStair) {
+                        if (whereStair == curDivergence && stepCheck.getStep() >= whereStairStep - 3){
+                            Log.v("test", "계단 지나기 3걸음 전");
+                            if(tts.isSpeaking())
+                                tts.stop();
+                            tts.speak(whereStairSide + "에 계단이 있습니다.", TextToSpeech.QUEUE_ADD, null,null);
+                            isStair = false;
+                        }
+                    }
                     Log.v("direction", dir + "      " + orientation.getOrientation());
                     if(!curDirection.equals("직진")) {
                         if (dir.equals("왼쪽")) {                     //사용자의 진행 방향이 왼쪽
                             if(!curDirection.equals("왼쪽")){         //가야 할 방향이 왼쪽이 아니면
                                 if(isCorrectDir){                     //틀린 방향이라고 아직 인식하지 못한 상태면
                                     if(ttsReady){
+                                        if(tts.isSpeaking())
+                                            tts.stop();
                                         tts.speak("잘못된 방향입니다. 뒤로 돌아주세요", TextToSpeech.QUEUE_ADD, null,null);
                                         isCorrectDir = false;
                                     }
@@ -105,6 +126,8 @@ public class NavigationActivity extends AppCompatActivity {
                             if(!curDirection.equals("오른쪽")){
                                 if(isCorrectDir){
                                     if(ttsReady){
+                                        if(tts.isSpeaking())
+                                            tts.stop();
                                         tts.speak("잘못된 방향입니다. 뒤로 돌아주세요", TextToSpeech.QUEUE_ADD, null,null);
                                         isCorrectDir = false;
                                     }
@@ -112,9 +135,11 @@ public class NavigationActivity extends AppCompatActivity {
                             }
                         } else if(dir.equals("뒤돌기")){               //사용자가 뒤를 돌고
                             if(!isCorrectDir){                         //현재 잘못된 진행 방향이면
-                                goalStep += stepCheck.getStep() - 6;   //잘못 걸어온 걸음수 만큼 추가하고 (뒤돌아서 인식되는 시점은 이미 6걸음을 간 상태)
+                                goalStep += stepCheck.getStep() - 14;   //잘못 걸어온 걸음수 만큼 추가하고 (뒤돌아서 인식되는 시점은 이미 6걸음을 간 상태)
                                 stepCheck.resetStep();                 //걸음 수를 초기화 한 후
                                 stepCheck.setStepCount(goalStep);      //목표 걸음수를 다시 설정
+                                if(tts.isSpeaking())
+                                    tts.stop();
                                 tts.speak("직진으로 " + goalStep + "걸음 가세요.", TextToSpeech.QUEUE_ADD, null,null);
                                 isCorrectDir = true;
                                 handler.removeMessages(STEP_COMPLETE);
@@ -122,6 +147,9 @@ public class NavigationActivity extends AppCompatActivity {
                         }
                     }
                     if (isCorrectDir && goalStep - stepCheck.getStep() <= SOON && !endPoint && !isAlert) {
+                        Log.v("test", "잠시후 꺾기");
+                        if(tts.isSpeaking())
+                            tts.stop();
                         tts.speak("잠시 후 " + route[routeIndex] + "방향입니다.", TextToSpeech.QUEUE_ADD, null, null);
                         isAlert = true;
                         setArrow(route[routeIndex]);
@@ -131,6 +159,7 @@ public class NavigationActivity extends AppCompatActivity {
                         setArrow("직진");
                     }
                 } else if (msg.what == STEP_COMPLETE) {
+                    Log.v("test", "도착!");
                     if(isCorrectDir) {
                         if (!endPoint)
                             arrivePoint();
@@ -177,7 +206,25 @@ public class NavigationActivity extends AppCompatActivity {
     public void init(){
         Intent intent = getIntent();
         String result = intent.getStringExtra("route");
-        route = result.split("/");
+        String[] temp = result.split("/");
+        ArrayList<String> arrRoute = new ArrayList<>();
+        boolean check = false;
+        for(int i=0;i<temp.length;i++){
+            if(temp[i].equals("왼쪽계단")){
+
+            }else if(temp[i].equals("오른쪽계단")){
+                isStair = true;
+                check = true;
+                whereStair = i/2 - 1;
+                whereStairSide="오른쪽";
+            } else if(check){
+                whereStairStep = Integer.parseInt(temp[i]);
+                check= false;
+            } else {
+                arrRoute.add(temp[i]);
+            }
+        }
+        route = (String[])arrRoute.toArray(new String[arrRoute.size()]);
         routeLength = route.length;
         //보폭 받아오기
         stride = 1;
@@ -199,6 +246,8 @@ public class NavigationActivity extends AppCompatActivity {
                 String text = route[routeIndex];
                 goal.setText(goalStep + " 걸음");
                 text += "으로 " + goalStep + "걸음 가세요.";
+                if(tts.isSpeaking())
+                    tts.stop();
                 tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
                 stepCheck.setStepCount(goalStep);
                 routeIndex = 2;
@@ -210,7 +259,8 @@ public class NavigationActivity extends AppCompatActivity {
     public void endNav(){
         stepCheck.endSensor();
         orientation.endSensor();
-
+        if(tts.isSpeaking())
+            tts.stop();
         tts.speak("목적지에 도착했습니다. 잠시 후 메인화면으로 돌아갑니다.", TextToSpeech.QUEUE_ADD, null, null);
         CustomDialog dialog = new CustomDialog(this);
         dialog.show();
@@ -230,6 +280,7 @@ public class NavigationActivity extends AppCompatActivity {
         curDirection = route[routeIndex];
         goalStep = Integer.parseInt(route[routeIndex + 1]);
         stepCheck.resetStep();
+        curDivergence += 1;
         while(true) {
             if (ttsReady) {
                 goal.setText(goalStep + " 걸음");
@@ -246,6 +297,8 @@ public class NavigationActivity extends AppCompatActivity {
                         text = route[routeIndex] + "으로" + goalStep + "걸음 후 " + route[routeIndex + 2] + "방향입니다.";
                     }
                 }
+                if(tts.isSpeaking())
+                    tts.stop();
                 tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
                 stepCheck.setStepCount(goalStep);
                 routeIndex += 2;
