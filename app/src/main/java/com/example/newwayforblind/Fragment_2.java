@@ -6,8 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +27,10 @@ public class Fragment_2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_2, container, false);
+
+        ImageView imageView = (ImageView)view.findViewById(R.id.tutorial);
+        int img_tutorial = R.drawable.img_tutorial2;
+        Glide.with(this).load(img_tutorial).into(imageView);
 
         linearLayout = (LinearLayout)view.findViewById(R.id.linearLayout);
         linearLayout.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
